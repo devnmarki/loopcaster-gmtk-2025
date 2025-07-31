@@ -1,6 +1,7 @@
 package com.devnmarki.engine.tilemap;
 
 
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.devnmarki.engine.ecs.Entity;
 
 public class Tilemap extends Entity {
@@ -13,5 +14,9 @@ public class Tilemap extends Entity {
 
     public Tilemap(String mapPath) {
         this(mapPath, "Colliders", "Entities");
+    }
+
+    public TiledMap getTiledMap() {
+        return getComponent(TilemapComponent.class).getTiledMap();
     }
 }

@@ -3,6 +3,11 @@ package com.devnmarki;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.devnmarki.engine.Engine;
+import com.devnmarki.engine.scene.SceneManager;
+import com.devnmarki.engine.tilemap.TilemapEntityLoader;
+import com.devnmarki.game.characters.Player;
+import com.devnmarki.game.scenes.MainMenuScene;
+import com.devnmarki.game.scenes.SampleScene;
 
 import static com.badlogic.gdx.Input.*;
 
@@ -14,17 +19,33 @@ public class Main extends ApplicationAdapter {
         super.create();
 
         Engine.gameScale = 4f;
+
+        TilemapEntityLoader.register("Player", Player.class);
+
+        SceneManager.addScene("sample", new SampleScene());
+        SceneManager.addScene("main_menu", new MainMenuScene());
+        SceneManager.loadScene("sample");
     }
 
     @Override
     public void render() {
         super.render();
 
-        Engine.getInstance().clear(255, 255, 255);
+        Engine.getInstance().clear(0, 9, 36);
         Engine.getInstance().update();
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             Gdx.app.exit();
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
+            Engine.debugMode = !Engine.debugMode;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.Q)) {
+            SceneManager.loadScene("main_menu");
+        } else if (Gdx.input.isKeyJustPressed(Keys.E)) {
+            SceneManager.loadScene("sample");
         }
     }
 

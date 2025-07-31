@@ -1,8 +1,10 @@
 package com.devnmarki.engine.ecs;
 
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.ecs.components.Component;
 import com.devnmarki.engine.ecs.components.Transform;
+import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.scene.SceneManager;
 
 import java.util.Collection;
@@ -48,6 +50,11 @@ public class Entity {
     public void onDestroy() {
         components.clear();
     }
+
+    public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) { }
+    public void onCollisionExit(Entity actor) { }
+    public void onPreCollision(Entity actor, Vector2 normal, Contact contact) { }
+    public void onPostCollision(Entity actor, Vector2 normal, Contact contact) { }
 
     public <T extends Component> void addComponent(T component) {
         Class<? extends Component> type = component.getClass();

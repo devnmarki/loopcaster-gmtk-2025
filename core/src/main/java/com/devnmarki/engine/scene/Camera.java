@@ -31,8 +31,8 @@ public class Camera extends Entity {
     public void onUpdate() {
         super.onUpdate();
 
-        orthoCamera.position.x = transform.localPosition.x;
-        orthoCamera.position.y = transform.localPosition.y;
+        orthoCamera.position.x = Math.round(transform.localPosition.x);
+        orthoCamera.position.y = Math.round(transform.localPosition.y);
         orthoCamera.update();
     }
 
