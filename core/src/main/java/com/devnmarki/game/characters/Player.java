@@ -32,6 +32,7 @@ public class Player extends Actor {
     private float input;
     private Direction facingDirection = Direction.Right;
     private boolean onGround = false;
+    private int jumps = 2;
 
     @Override
     public void onAwake() {
@@ -54,6 +55,8 @@ public class Player extends Actor {
 
         createInputActions();
         loadAnimations();
+
+        jumps = 2;
     }
 
     private void createInputActions() {
@@ -77,12 +80,16 @@ public class Player extends Actor {
         move();
         updateFacingDirection();
         updateCurrentAnimation();
+
+        if (onGround) {
+            jumps = 2;
+        }
     }
 
     private void getInput() {
         input = Input.getAxis("walk_left", "walk_right");
 
-        if (Input.isJustPressed("jump") && onGround) {
+        if (Input.isJustPressed("jump") && jumps > 0) {
             jump();
         }
     }
@@ -93,7 +100,10 @@ public class Player extends Actor {
 
     private void jump() {
         rigidbody.setVelocity(new Vector2(rigidbody.getVelocity().x, JUMP_FORCE));
-        onGround = false;
+        jumps--;
+
+        if (jumps == 1)
+            onGround = false;
     }
 
     private void updateFacingDirection() {

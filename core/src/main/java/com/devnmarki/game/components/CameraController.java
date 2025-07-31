@@ -2,7 +2,6 @@ package com.devnmarki.game.components;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.maps.MapProperties;
-import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.ecs.components.Component;
 import com.devnmarki.engine.math.MathUtils;
@@ -12,11 +11,11 @@ import com.devnmarki.game.characters.Player;
 
 public class CameraController extends Component {
 
+    private static final float DAMPING = 10f;
+
     private Player player;
     private Tilemap tilemap;
     private Camera camera;
-
-    private float damping = 10f;
 
     private int mapWidth;
     private int mapHeight;
@@ -43,7 +42,7 @@ public class CameraController extends Component {
     }
 
     private void followPlayer() {
-        float lerpSpeed = Gdx.graphics.getDeltaTime() * damping;
+        float lerpSpeed = Gdx.graphics.getDeltaTime() * DAMPING;
 
         entity.transform.localPosition.x = MathUtils.lerp(entity.transform.localPosition.x, player.transform.localPosition.x + 8f, lerpSpeed);
         entity.transform.localPosition.y = MathUtils.lerp(entity.transform.localPosition.y, player.transform.localPosition.y + 8f, lerpSpeed);
