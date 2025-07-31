@@ -12,10 +12,13 @@ public class Label extends Widget {
     private final String fontPath;
 
     private BitmapFont font;
+    private GlyphLayout layout = new GlyphLayout();
 
     private String content = "";
     private int fontSize;
     private Color color = Color.WHITE;
+    private float borderWidth = 0f;
+    private Color borderColor = Color.BLACK;
 
     public Label(String fontPath) {
         this.fontPath = fontPath;
@@ -24,17 +27,19 @@ public class Label extends Widget {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-    }
-
-    @Override
     public void onUpdate() {
         super.onUpdate();
 
-        GlyphLayout layout = new GlyphLayout();
         layout.setText(font, content);
+    }
+
+    @Override
+    public void onRender() {
+        super.onRender();
+
+        Engine.SPRITE_BATCH.begin();
         font.draw(Engine.SPRITE_BATCH, layout, transform.localPosition.x, transform.localPosition.y);
+        Engine.SPRITE_BATCH.end();
     }
 
     private void generateFont() {
@@ -46,6 +51,8 @@ public class Label extends Widget {
 
         params.size = fontSize;
         params.color = color;
+        params.borderWidth = borderWidth;
+        params.borderColor = borderColor;
         params.characters = FreeTypeFontGenerator.DEFAULT_CHARS;
 
         font = tempGenerator.generateFont(params);
@@ -55,7 +62,6 @@ public class Label extends Widget {
 
     public Label setContent(String content) {
         this.content = content;
-        generateFont();
 
         return this;
     }
@@ -72,6 +78,24 @@ public class Label extends Widget {
         generateFont();
 
         return this;
+    }
+
+    public Label setBorderWidth(float borderWidth) {
+        this.borderWidth = borderWidth;
+        generateFont();
+
+        return this;
+    }
+
+    public Label setBorderColor(Color borderColor) {
+        this.borderColor = borderColor;
+        generateFont();
+
+        return this;
+    }
+
+    public float getHeight() {
+        return layout.height;
     }
 
 }

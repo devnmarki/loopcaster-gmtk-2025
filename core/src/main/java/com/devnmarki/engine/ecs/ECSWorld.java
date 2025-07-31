@@ -5,15 +5,13 @@ import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.ui.Widget;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ECSWorld {
 
     private List<Entity> entities = new ArrayList<>();
     private Map<Class<? extends Entity>, List<Entity>> entityTypeMap = new HashMap<>();
+    private List<Widget> widgets = new ArrayList<>();
 
     public void addEntity(Entity entity) {
         entities.add(entity);
@@ -42,6 +40,8 @@ public class ECSWorld {
     }
 
     public void update() {
+        List<Widget> sortedWidgets = new ArrayList<>();
+
         List<Entity> entitiesCopy = new ArrayList<>(entities);
         for (Entity e : entitiesCopy) {
             if (e.isUI) {
@@ -51,23 +51,33 @@ public class ECSWorld {
                 Engine.SPRITE_BATCH.setProjectionMatrix(SceneManager.currentScene.getCamera().getProjection());
                 Engine.SHAPE_RENDERER.setProjectionMatrix(SceneManager.currentScene.getCamera().getProjection());
             }
+
+            if (e instanceof Widget widget) {
+                sortedWidgets.add(widget);
+            }
+
             e.onUpdate();
         }
+
+        sortedWidgets.sort(Comparator.comparingInt(Widget::getLayer));
     }
 
     public void renderWidgets() {
+        List<Widget> sortedWidgets = new ArrayList<>();
+
         List<Entity> entitiesCopy = new ArrayList<>(entities);
         for (Entity e : entitiesCopy) {
-            if (e.isUI) {
-                Engine.SPRITE_BATCH.setProjectionMatrix(SceneManager.currentScene.getUICamera().combined);
-                Engine.SHAPE_RENDERER.setProjectionMatrix(SceneManager.currentScene.getUICamera().combined);
-            } else {
-                Engine.SPRITE_BATCH.setProjectionMatrix(SceneManager.currentScene.getCamera().getProjection());
-                Engine.SHAPE_RENDERER.setProjectionMatrix(SceneManager.currentScene.getCamera().getProjection());
-            }
             if (e instanceof Widget widget) {
-                widget.onRender();
+                sortedWidgets.add(widget);
             }
+        }
+
+        sortedWidgets.sort(Comparator.comparingInt(Widget::getLayer));
+
+        for (Widget widget : sortedWidgets) {
+            Engine.SPRITE_BATCH.setProjectionMatrix(SceneManager.currentScene.getUICamera().combined);
+            Engine.SHAPE_RENDERER.setProjectionMatrix(SceneManager.currentScene.getUICamera().combined);
+            widget.onRender();
         }
     }
 
