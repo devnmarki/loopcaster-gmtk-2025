@@ -56,6 +56,20 @@ public class Entity {
     public void onPreCollision(Entity actor, Vector2 normal, Contact contact) { }
     public void onPostCollision(Entity actor, Vector2 normal, Contact contact) { }
 
+    protected void instantiate(Entity newEntity, Vector2 newPosition) {
+        newEntity.transform.localPosition = newPosition;
+
+        SceneManager.currentScene.addEntity(newEntity);
+    }
+
+    protected void destroy(Entity entity) {
+        SceneManager.currentScene.removeEntity(entity);
+    }
+
+    protected void destroySelf() {
+        SceneManager.currentScene.removeEntity(this);
+    }
+
     public <T extends Component> void addComponent(T component) {
         Class<? extends Component> type = component.getClass();
         if (components.containsKey(type)) {

@@ -11,7 +11,6 @@ import com.devnmarki.game.scenes.SampleScene;
 
 import static com.badlogic.gdx.Input.*;
 
-/** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
 
     @Override

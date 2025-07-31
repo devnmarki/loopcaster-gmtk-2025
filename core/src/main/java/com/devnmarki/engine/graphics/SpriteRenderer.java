@@ -20,8 +20,8 @@ public class SpriteRenderer extends Component {
         Engine.SPRITE_BATCH.draw(
                 sprite.getTexture(),
 
-                transform.worldPosition.x,
-                transform.worldPosition.y,
+                transform.localPosition.x,
+                transform.localPosition.y,
 
                 0,
                 0,

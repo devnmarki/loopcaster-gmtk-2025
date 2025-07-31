@@ -2,6 +2,7 @@ package com.devnmarki.game.characters;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.devnmarki.engine.Debug;
+import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.assets.ResourceManager;
 import com.devnmarki.engine.ecs.Actor;
 import com.devnmarki.engine.ecs.Entity;
@@ -15,12 +16,13 @@ import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
+import com.devnmarki.game.game_objects.MagicWand;
 
 import static com.badlogic.gdx.Input.*;
 
 import java.util.List;
 
-public class Player extends Actor {
+public class Player extends Entity {
 
     private static final float MOVE_SPEED = 3f;
     private static final float JUMP_FORCE = 11f;
@@ -33,6 +35,8 @@ public class Player extends Actor {
     private Direction facingDirection = Direction.Right;
     private boolean onGround = false;
     private int jumps = 2;
+
+    private MagicWand magicWand;
 
     @Override
     public void onAwake() {
@@ -57,6 +61,11 @@ public class Player extends Actor {
         loadAnimations();
 
         jumps = 2;
+
+        magicWand = new MagicWand();
+        instantiate(magicWand, transform.localPosition);
+
+        Debug.log(transform.worldPosition.convertToString());
     }
 
     private void createInputActions() {
@@ -84,6 +93,8 @@ public class Player extends Actor {
         if (onGround) {
             jumps = 2;
         }
+
+        updateMagicWand();
     }
 
     private void getInput() {
@@ -107,10 +118,10 @@ public class Player extends Actor {
     }
 
     private void updateFacingDirection() {
-        if (input < 0f) {
-            facingDirection = Direction.Left;
-        } else {
+        if (input > 0f) {
             facingDirection = Direction.Right;
+        } else if (input < 0f) {
+            facingDirection = Direction.Left;
         }
     }
 
@@ -121,6 +132,13 @@ public class Player extends Actor {
             animator.play("idle_" + animName);
         else
             animator.play("walk_" + animName);
+    }
+
+    private void updateMagicWand() {
+        if (facingDirection == Direction.Right)
+            magicWand.transform.localPosition.set(transform.localPosition.sub(new Vector2(3f, 0f).mul(Engine.gameScale)));
+        else
+            magicWand.transform.localPosition.set(transform.localPosition.sub(new Vector2(-4f, 0f).mul(Engine.gameScale)));
     }
 
     @Override
