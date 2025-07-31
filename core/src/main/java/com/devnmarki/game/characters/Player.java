@@ -10,8 +10,8 @@ import com.devnmarki.engine.graphics.Spritesheet;
 import com.devnmarki.engine.input.Input;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
-import com.devnmarki.engine.physics.Collider;
 import com.devnmarki.engine.physics.Rigidbody;
+import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
 
 import static com.badlogic.gdx.Input.*;
@@ -21,11 +21,14 @@ import java.util.List;
 public class Player extends Actor {
 
     private static final float MOVE_SPEED = 3f;
+    private static final float JUMP_FORCE = 11f;
 
     private Spritesheet spritesheet;
 
     private Rigidbody rigidbody;
     private float input;
+    private Direction facingDirection = Direction.Right;
+    private boolean onGround = false;
 
     @Override
     public void onAwake() {
@@ -48,8 +51,9 @@ public class Player extends Actor {
     }
 
     private void createInputActions() {
-        Input.addAction("walk_left", List.of(Keys.A, Keys.LEFT), null);
-        Input.addAction("walk_right", List.of(Keys.D, Keys.RIGHT), null);
+        Input.addAction("walk_left", List.of(Keys.A), null);
+        Input.addAction("walk_right", List.of(Keys.D), null);
+        Input.addAction("jump", List.of(Keys.SPACE), null);
     }
 
     @Override
@@ -58,14 +62,40 @@ public class Player extends Actor {
 
         getInput();
         move();
+        updateFacingDirection();
     }
 
     private void getInput() {
         input = Input.getAxis("walk_left", "walk_right");
+
+        if (Input.isJustPressed("jump") && onGround) {
+            jump();
+        }
     }
 
     private void move() {
         rigidbody.setVelocity(new Vector2(input * MOVE_SPEED, rigidbody.getVelocity().y));
     }
 
+    private void jump() {
+        rigidbody.setVelocity(new Vector2(rigidbody.getVelocity().x, JUMP_FORCE));
+        onGround = false;
+    }
+
+    private void updateFacingDirection() {
+        if (input < 0f) {
+            facingDirection = Direction.Left;
+        } else {
+            facingDirection = Direction.Right;
+        }
+    }
+
+    @Override
+    public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
+        super.onCollisionEnter(actor, normal, contact);
+
+        if (normal.y < 0) {
+            onGround = true;
+        }
+    }
 }
