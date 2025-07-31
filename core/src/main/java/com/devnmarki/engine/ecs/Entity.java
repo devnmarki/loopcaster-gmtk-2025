@@ -58,7 +58,6 @@ public class Entity {
 
     protected void instantiate(Entity newEntity, Vector2 newPosition) {
         newEntity.transform.localPosition = newPosition;
-
         SceneManager.currentScene.addEntity(newEntity);
     }
 

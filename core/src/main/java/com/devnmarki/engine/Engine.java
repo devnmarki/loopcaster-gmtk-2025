@@ -1,6 +1,7 @@
 package com.devnmarki.engine;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.devnmarki.engine.scene.SceneManager;
 
@@ -9,6 +10,7 @@ public class Engine {
     private static final Engine INSTANCE = new Engine();
 
     public static final SpriteBatch SPRITE_BATCH = new SpriteBatch();
+    public static final ShapeRenderer SHAPE_RENDERER = new ShapeRenderer();
     public static final float PPM = 100f;
 
     public static float gameScale = 1f;
@@ -20,8 +22,10 @@ public class Engine {
 
         SceneManager.updateCurrentScene();
 
-        if (SceneManager.currentScene.getCamera().getOrthoCamera() != null)
+        if (SceneManager.currentScene.getCamera().getOrthoCamera() != null) {
             SPRITE_BATCH.setProjectionMatrix(SceneManager.currentScene.getCamera().getProjection());
+            SHAPE_RENDERER.setProjectionMatrix(SceneManager.currentScene.getCamera().getProjection());
+        }
     }
 
     public void dispose() {

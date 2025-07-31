@@ -25,12 +25,13 @@ public class SceneManager {
         currentScene.getEcsWorld().update();
         currentScene.update();
 
+        Engine.SPRITE_BATCH.end();
+
         if (Engine.debugMode) {
             currentScene.getEcsWorld().debug();
             currentScene.debug();
         }
 
-        Engine.SPRITE_BATCH.end();
 
         if (Engine.debugMode) {
             physicsDebugRenderer.render(currentScene.getPhysicsWorld(), Engine.SPRITE_BATCH.getProjectionMatrix().cpy().scale(Engine.PPM, Engine.PPM, 1));

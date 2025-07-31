@@ -1,5 +1,7 @@
 package com.devnmarki.game.characters;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.Engine;
@@ -16,6 +18,7 @@ import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
+import com.devnmarki.game.game_objects.Bullet;
 import com.devnmarki.game.game_objects.MagicWand;
 
 import static com.badlogic.gdx.Input.*;
@@ -37,6 +40,7 @@ public class Player extends Entity {
     private int jumps = 2;
 
     private MagicWand magicWand;
+    private Vector2 shootPoint;
 
     @Override
     public void onAwake() {
@@ -64,14 +68,13 @@ public class Player extends Entity {
 
         magicWand = new MagicWand();
         instantiate(magicWand, transform.localPosition);
-
-        Debug.log(transform.worldPosition.convertToString());
     }
 
     private void createInputActions() {
         Input.addAction("walk_left", List.of(Keys.A), null);
         Input.addAction("walk_right", List.of(Keys.D), null);
         Input.addAction("jump", List.of(Keys.SPACE), null);
+        Input.addAction("shoot", List.of(Keys.SHIFT_LEFT), null);
     }
 
     private void loadAnimations() {
@@ -103,6 +106,10 @@ public class Player extends Entity {
         if (Input.isJustPressed("jump") && jumps > 0) {
             jump();
         }
+
+        if (Input.isJustPressed("shoot")) {
+            shoot();
+        }
     }
 
     private void move() {
@@ -111,10 +118,14 @@ public class Player extends Entity {
 
     private void jump() {
         rigidbody.setVelocity(new Vector2(rigidbody.getVelocity().x, JUMP_FORCE));
-        jumps--;
 
+        jumps--;
         if (jumps == 1)
             onGround = false;
+    }
+
+    private void shoot() {
+        instantiate(new Bullet(), shootPoint);
     }
 
     private void updateFacingDirection() {
@@ -135,10 +146,14 @@ public class Player extends Entity {
     }
 
     private void updateMagicWand() {
-        if (facingDirection == Direction.Right)
-            magicWand.transform.localPosition.set(transform.localPosition.sub(new Vector2(3f, 0f).mul(Engine.gameScale)));
-        else
-            magicWand.transform.localPosition.set(transform.localPosition.sub(new Vector2(-4f, 0f).mul(Engine.gameScale)));
+        if (facingDirection == Direction.Right) {
+            magicWand.transform.localPosition = new Vector2(transform.localPosition.sub(new Vector2(3f, 1f).mul(Engine.gameScale)));
+            shootPoint = new Vector2(magicWand.transform.localPosition.x + 20f * Engine.gameScale, magicWand.transform.localPosition.y + 6f * Engine.gameScale);
+        }
+        else {
+            magicWand.transform.localPosition = new Vector2(transform.localPosition.sub(new Vector2(-4f, 1f).mul(Engine.gameScale)));
+            shootPoint = new Vector2(magicWand.transform.localPosition.x - 10f * Engine.gameScale, magicWand.transform.localPosition.y + 6f * Engine.gameScale);
+        }
     }
 
     @Override
@@ -148,5 +163,15 @@ public class Player extends Entity {
         if (normal.y < 0) {
             onGround = true;
         }
+    }
+
+    @Override
+    public void onDebug() {
+        super.onDebug();
+
+        Engine.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
+        Engine.SHAPE_RENDERER.setColor(Color.RED);
+        Engine.SHAPE_RENDERER.rect(shootPoint.x, shootPoint.y, 4f, 4f);
+        Engine.SHAPE_RENDERER.end();
     }
 }
