@@ -1,6 +1,8 @@
 package com.devnmarki.engine.ecs;
 
 import com.devnmarki.engine.Debug;
+import com.devnmarki.engine.Engine;
+import com.devnmarki.engine.scene.SceneManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,6 +43,13 @@ public class ECSWorld {
     public void update() {
         List<Entity> entitiesCopy = new ArrayList<>(entities);
         for (Entity e : entitiesCopy) {
+            if (e.isUI) {
+                Engine.SPRITE_BATCH.setProjectionMatrix(SceneManager.currentScene.getUICamera().combined);
+                Engine.SHAPE_RENDERER.setProjectionMatrix(SceneManager.currentScene.getUICamera().combined);
+            } else {
+                Engine.SPRITE_BATCH.setProjectionMatrix(SceneManager.currentScene.getCamera().getProjection());
+                Engine.SHAPE_RENDERER.setProjectionMatrix(SceneManager.currentScene.getCamera().getProjection());
+            }
             e.onUpdate();
         }
     }

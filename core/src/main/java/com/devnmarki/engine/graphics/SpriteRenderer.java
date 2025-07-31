@@ -20,8 +20,8 @@ public class SpriteRenderer extends Component {
         Engine.SPRITE_BATCH.draw(
                 sprite.getTexture(),
 
-                transform.worldPosition.x,
-                transform.worldPosition.y,
+                transform.localPosition.x,
+                transform.localPosition.y,
 
                 0,
                 0,
@@ -29,10 +29,10 @@ public class SpriteRenderer extends Component {
                 sprite.getTexture().getRegionWidth(),
                 sprite.getTexture().getRegionHeight(),
 
-                transform.worldScale.x == 1f ? scale : scale + transform.worldScale.x,
-                transform.worldScale.y == 1f ? scale : scale + transform.worldScale.y,
+                transform.localPosition.x == 1f ? scale : scale + transform.localScale.x,
+                transform.localPosition.y == 1f ? scale : scale + transform.localScale.y,
 
-                transform.worldRotation
+                transform.localRotation
         );
     }
 
