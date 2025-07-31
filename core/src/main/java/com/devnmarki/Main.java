@@ -6,6 +6,7 @@ import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.tilemap.TilemapEntityLoader;
 import com.devnmarki.game.characters.Player;
+import com.devnmarki.game.scenes.MainMenuScene;
 import com.devnmarki.game.scenes.SampleScene;
 
 import static com.badlogic.gdx.Input.*;
@@ -22,6 +23,7 @@ public class Main extends ApplicationAdapter {
         TilemapEntityLoader.register("Player", Player.class);
 
         SceneManager.addScene("sample", new SampleScene());
+        SceneManager.addScene("main_menu", new MainMenuScene());
         SceneManager.loadScene("sample");
     }
 
@@ -38,6 +40,12 @@ public class Main extends ApplicationAdapter {
 
         if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
             Engine.debugMode = !Engine.debugMode;
+        }
+
+        if (Gdx.input.isKeyJustPressed(Keys.Q)) {
+            SceneManager.loadScene("main_menu");
+        } else if (Gdx.input.isKeyJustPressed(Keys.E)) {
+            SceneManager.loadScene("sample");
         }
     }
 
