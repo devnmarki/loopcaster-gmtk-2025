@@ -4,6 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.devnmarki.engine.Engine;
+import com.devnmarki.engine.ecs.Actor;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.scene.SceneManager;
 

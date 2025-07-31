@@ -7,6 +7,7 @@ import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.ecs.ECSWorld;
 import com.devnmarki.engine.ecs.Entity;
 import com.devnmarki.engine.math.Vector2;
+import com.devnmarki.engine.physics.CollisionContactListener;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public abstract class Scene {
             physicsWorld.dispose();
         }
         physicsWorld = new World(new com.badlogic.gdx.math.Vector2(0f, Engine.gravity), true);
+        physicsWorld.setContactListener(new CollisionContactListener());
 
         loadEntities();
 

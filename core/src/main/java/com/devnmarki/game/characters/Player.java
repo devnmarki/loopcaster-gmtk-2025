@@ -1,12 +1,16 @@
 package com.devnmarki.game.characters;
 
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.assets.ResourceManager;
 import com.devnmarki.engine.ecs.Actor;
+import com.devnmarki.engine.ecs.Entity;
 import com.devnmarki.engine.graphics.SpriteRenderer;
 import com.devnmarki.engine.graphics.Spritesheet;
 import com.devnmarki.engine.input.Input;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
+import com.devnmarki.engine.physics.Collider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.Globals;
 
@@ -63,4 +67,5 @@ public class Player extends Actor {
     private void move() {
         rigidbody.setVelocity(new Vector2(input * MOVE_SPEED, rigidbody.getVelocity().y));
     }
+
 }
