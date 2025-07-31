@@ -1,7 +1,11 @@
 package com.devnmarki.game.characters;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.devnmarki.engine.Debug;
+import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.assets.ResourceManager;
 import com.devnmarki.engine.ecs.Actor;
 import com.devnmarki.engine.ecs.Entity;
@@ -15,15 +19,18 @@ import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
+import com.devnmarki.game.game_objects.Bullet;
+import com.devnmarki.game.game_objects.MagicWand;
 
 import static com.badlogic.gdx.Input.*;
 
 import java.util.List;
 
-public class Player extends Actor {
+public class Player extends Entity {
 
     private static final float MOVE_SPEED = 3f;
     private static final float JUMP_FORCE = 11f;
+    private static final float FIRE_RATE = 0.15f;
 
     private Spritesheet spritesheet;
     private Animator animator;
@@ -33,6 +40,10 @@ public class Player extends Actor {
     private Direction facingDirection = Direction.Right;
     private boolean onGround = false;
     private int jumps = 2;
+
+    private MagicWand magicWand;
+    private Vector2 shootPoint;
+    private float fireRateTimer = 0f;
 
     @Override
     public void onAwake() {
@@ -57,12 +68,16 @@ public class Player extends Actor {
         loadAnimations();
 
         jumps = 2;
+
+        magicWand = new MagicWand();
+        instantiate(magicWand, transform.localPosition);
     }
 
     private void createInputActions() {
-        Input.addAction("walk_left", List.of(Keys.A), null);
-        Input.addAction("walk_right", List.of(Keys.D), null);
-        Input.addAction("jump", List.of(Keys.SPACE), null);
+        Input.addAction("walk_left", List.of(Keys.LEFT), null);
+        Input.addAction("walk_right", List.of(Keys.RIGHT), null);
+        Input.addAction("jump", List.of(Keys.Z), null);
+        Input.addAction("shoot", List.of(Keys.X), null);
     }
 
     private void loadAnimations() {
@@ -84,6 +99,8 @@ public class Player extends Actor {
         if (onGround) {
             jumps = 2;
         }
+
+        updateMagicWand();
     }
 
     private void getInput() {
@@ -91,6 +108,11 @@ public class Player extends Actor {
 
         if (Input.isJustPressed("jump") && jumps > 0) {
             jump();
+        }
+
+        fireRateTimer += Gdx.graphics.getDeltaTime();
+        if (Input.isPressed("shoot") && fireRateTimer >= FIRE_RATE) {
+            shoot();
         }
     }
 
@@ -100,17 +122,22 @@ public class Player extends Actor {
 
     private void jump() {
         rigidbody.setVelocity(new Vector2(rigidbody.getVelocity().x, JUMP_FORCE));
-        jumps--;
 
+        jumps--;
         if (jumps == 1)
             onGround = false;
     }
 
+    private void shoot() {
+        instantiate(new Bullet(facingDirection), shootPoint);
+        fireRateTimer = 0f;
+    }
+
     private void updateFacingDirection() {
-        if (input < 0f) {
-            facingDirection = Direction.Left;
-        } else {
+        if (input > 0f) {
             facingDirection = Direction.Right;
+        } else if (input < 0f) {
+            facingDirection = Direction.Left;
         }
     }
 
@@ -123,6 +150,17 @@ public class Player extends Actor {
             animator.play("walk_" + animName);
     }
 
+    private void updateMagicWand() {
+        if (facingDirection == Direction.Right) {
+            magicWand.transform.localPosition = new Vector2(transform.localPosition.sub(new Vector2(3f, 1f).mul(Engine.gameScale)));
+            shootPoint = new Vector2(magicWand.transform.localPosition.x + 20f * Engine.gameScale, magicWand.transform.localPosition.y + 6f * Engine.gameScale);
+        }
+        else {
+            magicWand.transform.localPosition = new Vector2(transform.localPosition.sub(new Vector2(-4f, 1f).mul(Engine.gameScale)));
+            shootPoint = new Vector2(magicWand.transform.localPosition.x - 10f * Engine.gameScale, magicWand.transform.localPosition.y + 6f * Engine.gameScale);
+        }
+    }
+
     @Override
     public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
         super.onCollisionEnter(actor, normal, contact);
@@ -130,5 +168,15 @@ public class Player extends Actor {
         if (normal.y < 0) {
             onGround = true;
         }
+    }
+
+    @Override
+    public void onDebug() {
+        super.onDebug();
+
+        Engine.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
+        Engine.SHAPE_RENDERER.setColor(Color.RED);
+        Engine.SHAPE_RENDERER.rect(shootPoint.x, shootPoint.y, 4f, 4f);
+        Engine.SHAPE_RENDERER.end();
     }
 }

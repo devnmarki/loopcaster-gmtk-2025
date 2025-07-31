@@ -8,16 +8,16 @@ import java.util.List;
 
 public class Transform extends Component {
 
-    public Vector2 localPosition = Vector2.zero();
+    public Vector2 localPosition = new Vector2(0, 0);
     public float localRotation = 0f;
-    public Vector2 localScale = Vector2.one();
+    public Vector2 localScale = new Vector2(1, 1);
 
     private Transform parent = null;
     private final List<Transform> children = new ArrayList<>();
 
-    public Vector2 worldPosition = Vector2.zero();
+    public Vector2 worldPosition = new Vector2(0, 0);
     public float worldRotation = 0f;
-    public Vector2 worldScale = Vector2.one();
+    public Vector2 worldScale = new Vector2(1, 1);
 
     private final Matrix3 localMatrix = new Matrix3();
     private final Matrix3 worldMatrix = new Matrix3();
@@ -59,5 +59,11 @@ public class Transform extends Component {
             worldRotation = localRotation;
             worldScale.set(localScale);
         }
+    }
+
+    public Transform setLocalPosition(Vector2 localPosition) {
+        this.localPosition = localPosition;
+
+        return this;
     }
 }
