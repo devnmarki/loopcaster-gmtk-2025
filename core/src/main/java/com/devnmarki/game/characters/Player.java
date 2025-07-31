@@ -28,10 +28,12 @@ import java.util.List;
 
 public class Player extends Entity {
 
+    private static Player INSTANCE;
+
     private static final float MOVE_SPEED = 3f;
     private static final float JUMP_FORCE = 11f;
     private static final float FIRE_RATE = 0.15f;
-    private static final float MAX_MANA = 10f;
+    public static final float MAX_MANA = 10f;
 
     private Spritesheet spritesheet;
     private Animator animator;
@@ -51,6 +53,8 @@ public class Player extends Entity {
     @Override
     public void onAwake() {
         super.onAwake();
+
+        INSTANCE = this;
 
         spritesheet = new Spritesheet(ResourceManager.loadTexture("sprites/characters/player_sheet.png"), 3, 2, new Vector2(16), false);
 
@@ -76,8 +80,6 @@ public class Player extends Entity {
         instantiate(magicWand, transform.localPosition);
 
         currentMana = MAX_MANA;
-
-        //instantiate(new Label("fonts/MedodicaRegular.otf").setContent("Mana").setColor(Color.ORANGE).setFontSize(50), new Vector2(0, 100));
     }
 
     private void createInputActions() {
@@ -158,7 +160,6 @@ public class Player extends Entity {
     }
 
     private void updateMagicWand() {
-
         if (facingDirection == Direction.Right) {
             magicWand.transform.localPosition.x = transform.localPosition.x - 4f * Engine.gameScale;
             magicWand.transform.localPosition.y = transform.localPosition.y - 2f * Engine.gameScale;
@@ -202,4 +203,13 @@ public class Player extends Entity {
     private void die() {
         Debug.log("u ded loser");
     }
+
+    public static Player getInstance() {
+        return INSTANCE;
+    }
+
+    public float getCurrentMana() {
+        return currentMana;
+    }
+
 }

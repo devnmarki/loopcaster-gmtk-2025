@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.devnmarki.engine.scene.SceneManager;
+import space.earlygrey.shapedrawer.ShapeDrawer;
 
 public class Engine {
 

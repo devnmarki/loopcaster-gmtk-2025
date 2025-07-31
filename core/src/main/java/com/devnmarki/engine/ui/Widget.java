@@ -8,4 +8,6 @@ public abstract class Widget extends Entity {
        this.isUI = true;
    }
 
+   public void onRender() { }
+
 }

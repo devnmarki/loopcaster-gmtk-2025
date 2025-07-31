@@ -27,6 +27,8 @@ public class SceneManager {
 
         Engine.SPRITE_BATCH.end();
 
+        currentScene.getEcsWorld().renderWidgets();
+
         if (Engine.debugMode) {
             currentScene.getEcsWorld().debug();
             currentScene.debug();

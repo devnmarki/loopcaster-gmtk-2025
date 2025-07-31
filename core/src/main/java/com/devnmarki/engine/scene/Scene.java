@@ -61,6 +61,11 @@ public abstract class Scene {
         ecsWorld.addEntity(entity);
     }
 
+    public void addEntity(Entity entity, Vector2 position) {
+        entity.transform.localPosition = position;
+        ecsWorld.addEntity(entity);
+    }
+
     public void removeEntity(Entity entity) {
         ecsWorld.removeEntity(entity);
     }
