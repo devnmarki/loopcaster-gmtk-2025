@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.ecs.ECSWorld;
@@ -23,7 +24,7 @@ public abstract class Scene {
     protected Camera camera;
     protected OrthographicCamera uiCamera;
 
-    private Viewport uiViewport;
+    private FitViewport uiViewport;
 
     public void enter() {
         ecsWorld = new ECSWorld();
@@ -40,7 +41,7 @@ public abstract class Scene {
         camera.transform.localPosition = new Vector2(camera.getViewportWidth() / 2f, camera.getViewportHeight() / 2f);
 
         uiCamera = new OrthographicCamera(camera.getViewportWidth(), camera.getViewportHeight());
-        uiViewport = new ExtendViewport(camera.getViewportWidth(), camera.getViewportHeight(), uiCamera);
+        uiViewport = new FitViewport(camera.getViewportWidth(), camera.getViewportHeight(), uiCamera);
         uiCamera.position.x = camera.getViewportWidth() / 2f;
         uiCamera.position.y = camera.getViewportHeight() / 2f;
         uiCamera.update();

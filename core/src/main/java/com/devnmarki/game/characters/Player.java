@@ -16,6 +16,7 @@ import com.devnmarki.engine.input.Input;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
+import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.ui.Label;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
@@ -178,7 +179,6 @@ public class Player extends Entity {
             die();
             currentMana = 0f;
         }
-        Debug.log(currentMana);
     }
 
     @Override
@@ -201,7 +201,7 @@ public class Player extends Entity {
     }
 
     private void die() {
-        Debug.log("u ded loser");
+        SceneManager.loadScene("death_screen");
     }
 
     public static Player getInstance() {

@@ -94,6 +94,10 @@ public class Label extends Widget {
         return this;
     }
 
+    public float getWidth() {
+        return layout.width;
+    }
+
     public float getHeight() {
         return layout.height;
     }
