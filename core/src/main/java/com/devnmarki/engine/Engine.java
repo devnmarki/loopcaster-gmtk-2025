@@ -32,7 +32,7 @@ public class Engine {
     }
 
     public void resize(int width, int height) {
-        if (SceneManager.currentScene == null) return;
+        if (SceneManager.currentScene == null || SceneManager.currentScene.getCamera().getViewport() == null) return;
 
         SceneManager.currentScene.getCamera().getViewport().update(width, height, true);
     }
