@@ -7,6 +7,8 @@ import com.devnmarki.engine.ecs.Actor;
 import com.devnmarki.engine.ecs.Entity;
 import com.devnmarki.engine.graphics.SpriteRenderer;
 import com.devnmarki.engine.graphics.Spritesheet;
+import com.devnmarki.engine.graphics.animation.Animation;
+import com.devnmarki.engine.graphics.animation.Animator;
 import com.devnmarki.engine.input.Input;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
@@ -24,6 +26,7 @@ public class Player extends Actor {
     private static final float JUMP_FORCE = 11f;
 
     private Spritesheet spritesheet;
+    private Animator animator;
 
     private Rigidbody rigidbody;
     private float input;
@@ -39,6 +42,7 @@ public class Player extends Actor {
         addComponent(new SpriteRenderer().setSprite(spritesheet.getSprite(0)));
         addComponent(new BoxCollider().setSize(new Vector2(7, 14)).setOffset(new Vector2(4, 0)));
         addComponent(new Rigidbody().setGravityScale(Globals.GRAVITY_SCALE));
+        addComponent(new Animator());
     }
 
     @Override
@@ -46,14 +50,23 @@ public class Player extends Actor {
         super.onStart();
 
         rigidbody = getComponent(Rigidbody.class);
+        animator = getComponent(Animator.class);
 
         createInputActions();
+        loadAnimations();
     }
 
     private void createInputActions() {
         Input.addAction("walk_left", List.of(Keys.A), null);
         Input.addAction("walk_right", List.of(Keys.D), null);
         Input.addAction("jump", List.of(Keys.SPACE), null);
+    }
+
+    private void loadAnimations() {
+        animator.addAnimation("idle_right", new Animation(spritesheet, new int[] { 0 }, 0.1f, true, false));
+        animator.addAnimation("idle_left", new Animation(spritesheet, new int[] { 0 }, 0.1f, true, true));
+        animator.addAnimation("walk_right", new Animation(spritesheet, new int[] { 3, 4, 5 }, 0.15f, true, false));
+        animator.addAnimation("walk_left", new Animation(spritesheet, new int[] { 3, 4, 5 }, 0.15f, true, true));
     }
 
     @Override
@@ -63,6 +76,7 @@ public class Player extends Actor {
         getInput();
         move();
         updateFacingDirection();
+        updateCurrentAnimation();
     }
 
     private void getInput() {
@@ -88,6 +102,15 @@ public class Player extends Actor {
         } else {
             facingDirection = Direction.Right;
         }
+    }
+
+    private void updateCurrentAnimation() {
+        String animName = facingDirection.toString().toLowerCase();
+
+        if (input == 0f)
+            animator.play("idle_" + animName);
+        else
+            animator.play("walk_" + animName);
     }
 
     @Override
