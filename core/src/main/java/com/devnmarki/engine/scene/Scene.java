@@ -6,7 +6,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.ecs.ECSWorld;
 import com.devnmarki.engine.ecs.Entity;
+import com.devnmarki.engine.ecs.EntityDestroyer;
 import com.devnmarki.engine.math.Vector2;
+import com.devnmarki.engine.physics.Collider;
 import com.devnmarki.engine.physics.CollisionContactListener;
 
 import java.util.List;
@@ -35,6 +37,8 @@ public abstract class Scene {
 
     public void update() {
         physicsWorld.step(1 / 60f, 6, 2);
+
+        EntityDestroyer.flush();
     }
 
     public void debug() { }

@@ -1,5 +1,6 @@
 package com.devnmarki.game.characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
@@ -29,6 +30,7 @@ public class Player extends Entity {
 
     private static final float MOVE_SPEED = 3f;
     private static final float JUMP_FORCE = 11f;
+    private static final float FIRE_RATE = 0.15f;
 
     private Spritesheet spritesheet;
     private Animator animator;
@@ -41,6 +43,7 @@ public class Player extends Entity {
 
     private MagicWand magicWand;
     private Vector2 shootPoint;
+    private float fireRateTimer = 0f;
 
     @Override
     public void onAwake() {
@@ -71,10 +74,10 @@ public class Player extends Entity {
     }
 
     private void createInputActions() {
-        Input.addAction("walk_left", List.of(Keys.A), null);
-        Input.addAction("walk_right", List.of(Keys.D), null);
-        Input.addAction("jump", List.of(Keys.SPACE), null);
-        Input.addAction("shoot", List.of(Keys.SHIFT_LEFT), null);
+        Input.addAction("walk_left", List.of(Keys.LEFT), null);
+        Input.addAction("walk_right", List.of(Keys.RIGHT), null);
+        Input.addAction("jump", List.of(Keys.Z), null);
+        Input.addAction("shoot", List.of(Keys.X), null);
     }
 
     private void loadAnimations() {
@@ -107,7 +110,8 @@ public class Player extends Entity {
             jump();
         }
 
-        if (Input.isJustPressed("shoot")) {
+        fireRateTimer += Gdx.graphics.getDeltaTime();
+        if (Input.isPressed("shoot") && fireRateTimer >= FIRE_RATE) {
             shoot();
         }
     }
@@ -125,7 +129,8 @@ public class Player extends Entity {
     }
 
     private void shoot() {
-        instantiate(new Bullet(), shootPoint);
+        instantiate(new Bullet(facingDirection), shootPoint);
+        fireRateTimer = 0f;
     }
 
     private void updateFacingDirection() {

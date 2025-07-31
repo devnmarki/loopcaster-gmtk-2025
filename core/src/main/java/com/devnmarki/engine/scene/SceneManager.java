@@ -32,7 +32,6 @@ public class SceneManager {
             currentScene.debug();
         }
 
-
         if (Engine.debugMode) {
             physicsDebugRenderer.render(currentScene.getPhysicsWorld(), Engine.SPRITE_BATCH.getProjectionMatrix().cpy().scale(Engine.PPM, Engine.PPM, 1));
         }

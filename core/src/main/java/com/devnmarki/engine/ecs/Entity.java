@@ -5,6 +5,8 @@ import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.ecs.components.Component;
 import com.devnmarki.engine.ecs.components.Transform;
 import com.devnmarki.engine.math.Vector2;
+import com.devnmarki.engine.physics.BoxCollider;
+import com.devnmarki.engine.physics.Collider;
 import com.devnmarki.engine.scene.SceneManager;
 
 import java.util.Collection;
@@ -47,7 +49,16 @@ public class Entity {
         }
     }
 
+    protected void instantiate(Entity newEntity, Vector2 newPosition) {
+        newEntity.transform.localPosition = newPosition;
+        SceneManager.currentScene.addEntity(newEntity);
+    }
+
     public void onDestroy() {
+        if (hasComponent(BoxCollider.class)) {
+            BoxCollider collider = getComponent(BoxCollider.class);
+            SceneManager.currentScene.getPhysicsWorld().destroyBody(collider.body);
+        }
         components.clear();
     }
 
@@ -55,19 +66,6 @@ public class Entity {
     public void onCollisionExit(Entity actor) { }
     public void onPreCollision(Entity actor, Vector2 normal, Contact contact) { }
     public void onPostCollision(Entity actor, Vector2 normal, Contact contact) { }
-
-    protected void instantiate(Entity newEntity, Vector2 newPosition) {
-        newEntity.transform.localPosition = newPosition;
-        SceneManager.currentScene.addEntity(newEntity);
-    }
-
-    protected void destroy(Entity entity) {
-        SceneManager.currentScene.removeEntity(entity);
-    }
-
-    protected void destroySelf() {
-        SceneManager.currentScene.removeEntity(this);
-    }
 
     public <T extends Component> void addComponent(T component) {
         Class<? extends Component> type = component.getClass();
@@ -81,16 +79,22 @@ public class Entity {
 
     @SuppressWarnings("unchecked")
     public <T extends Component> T getComponent(Class<T> type) {
-        Component component = components.get(type);
-        if (component != null) {
-            return (T) component;
+        for (Component c : components.values()) {
+            if (c.getClass() == type) {
+                return (T) c;
+            }
         }
         throw new RuntimeException("Component of type " + type.getName() + " not found on entity.");
+    }
+
+    public <T extends Component> boolean hasComponent(Class<T> component) {
+        return components.containsKey(component);
     }
 
     public <T extends Component> boolean hasComponent(T component) {
         return components.containsKey(component.getClass());
     }
+
 
     public Collection<Component> getAllComponents() {
         return components.values();
