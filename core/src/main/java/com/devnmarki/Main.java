@@ -35,6 +35,10 @@ public class Main extends ApplicationAdapter {
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             Gdx.app.exit();
         }
+
+        if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
+            Engine.debugMode = !Engine.debugMode;
+        }
     }
 
     @Override
