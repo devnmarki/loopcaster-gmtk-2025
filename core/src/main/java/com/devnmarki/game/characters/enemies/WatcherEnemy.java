@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.assets.ResourceManager;
 import com.devnmarki.engine.ecs.Entity;
+import com.devnmarki.engine.ecs.EntityDestroyer;
 import com.devnmarki.engine.graphics.Sprite;
 import com.devnmarki.engine.graphics.Spritesheet;
 import com.devnmarki.engine.math.Vector2;
@@ -30,7 +31,6 @@ public class WatcherEnemy extends Enemy {
         setHealth(4);
 
         addComponent(new BoxCollider().setSize(new Vector2(13f, 9f)).setOffset(new Vector2(3.5f, 7f)));
-        addComponent(new Rigidbody().setGravityScale(0f));
     }
 
     @Override
@@ -38,6 +38,7 @@ public class WatcherEnemy extends Enemy {
         super.onStart();
 
         rigidbody = getComponent(Rigidbody.class);
+        rigidbody.setGravityScale(0f);
 
         generateInitialMoveDirection();
     }
@@ -72,5 +73,17 @@ public class WatcherEnemy extends Enemy {
         if (collisionNormal.y != 0f) {
             moveDirection.y *= -1f;
         }
+    }
+
+    @Override
+    public void onDamage(int damage) {
+        super.onDamage(damage);
+    }
+
+    @Override
+    protected void die() {
+        super.die();
+
+        EntityDestroyer.queue(this);
     }
 }

@@ -11,11 +11,12 @@ import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.Direction;
+import com.devnmarki.game.IDamageable;
 
 public class Bullet extends Entity {
 
     private static final float LIFETIME = 0.5f;
-    private static final float SPEED = 10f;
+    private static final float SPEED = 12f;
 
     private final Sprite sprite;
     private final Direction facingDirection;
@@ -75,6 +76,10 @@ public class Bullet extends Entity {
     @Override
     public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
         super.onCollisionEnter(actor, normal, contact);
+
+        if (actor instanceof IDamageable) {
+            ((IDamageable) actor).onDamage(1);
+        }
 
         shouldDestroy = true;
     }
