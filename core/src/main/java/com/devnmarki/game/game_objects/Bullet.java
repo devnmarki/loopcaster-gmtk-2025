@@ -15,7 +15,7 @@ import com.devnmarki.game.Direction;
 public class Bullet extends Entity {
 
     private static final float LIFETIME = 0.5f;
-    private static final float SPEED = 8.5f;
+    private static final float SPEED = 10f;
 
     private final Sprite sprite;
     private final Direction facingDirection;

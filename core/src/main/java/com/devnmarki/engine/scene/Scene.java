@@ -31,10 +31,17 @@ public abstract class Scene {
     public void enter() {
         if (physicsWorld != null) {
             destroyAllPhysicsBodies();
+
+            if (physicsWorld.getBodyCount() != 0) return;
+
             physicsWorld.dispose();
             physicsWorld = null;
+
+            Gdx.app.log("Scene", "Physics world disposed cleanly.");
         }
+
         ecsWorld = new ECSWorld();
+
         physicsWorld = new World(new com.badlogic.gdx.math.Vector2(0f, Engine.gravity), true);
         physicsWorld.setContactListener(new CollisionContactListener());
 
@@ -69,11 +76,7 @@ public abstract class Scene {
     public void debug() { }
 
     public void leave() {
-        if (physicsWorld != null) {
-            destroyAllPhysicsBodies();
-            physicsWorld.dispose();
-            physicsWorld = null;
-        }
+
     }
 
     public abstract void loadEntities();

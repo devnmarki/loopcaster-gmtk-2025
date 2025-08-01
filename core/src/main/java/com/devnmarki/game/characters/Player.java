@@ -31,8 +31,8 @@ public class Player extends Entity {
 
     private static Player INSTANCE;
 
-    private static final float MOVE_SPEED = 3f;
-    private static final float JUMP_FORCE = 11f;
+    private static final float MOVE_SPEED = 5f;
+    private static final float JUMP_FORCE = 16f;
     private static final float FIRE_RATE = 0.15f;
     public static final float MAX_MANA = 10f;
 
@@ -139,6 +139,8 @@ public class Player extends Entity {
     }
 
     private void shoot() {
+        if (shootPoint == null) return;
+
         instantiate(new Bullet(facingDirection), shootPoint);
         fireRateTimer = 0f;
     }
@@ -193,6 +195,8 @@ public class Player extends Entity {
     @Override
     public void onDebug() {
         super.onDebug();
+
+        if (shootPoint == null) return;
 
         Engine.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
         Engine.SHAPE_RENDERER.setColor(Color.RED);

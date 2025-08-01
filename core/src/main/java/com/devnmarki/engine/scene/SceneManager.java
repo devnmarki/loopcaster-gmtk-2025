@@ -35,6 +35,8 @@ public class SceneManager {
         }
 
         if (Engine.debugMode) {
+            Engine.SPRITE_BATCH.setProjectionMatrix(currentScene.getCamera().getProjection());
+            Engine.SHAPE_RENDERER.setProjectionMatrix(currentScene.getCamera().getProjection());
             physicsDebugRenderer.render(currentScene.getPhysicsWorld(), Engine.SPRITE_BATCH.getProjectionMatrix().cpy().scale(Engine.PPM, Engine.PPM, 1));
         }
     }

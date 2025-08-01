@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 
 public class Globals {
 
-    public static final float GRAVITY_SCALE = 3f;
+    public static final float GRAVITY_SCALE = 4f;
 
     public static final String FONT = "fonts/MedodicaRegular.otf";
 
