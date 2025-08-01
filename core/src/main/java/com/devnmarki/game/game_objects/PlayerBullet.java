@@ -21,7 +21,8 @@ public class PlayerBullet extends Bullet {
             damageable.onDamage(1);
         }
 
-        setShouldDestroy(true);
+        if (!(actor instanceof Player))
+            setShouldDestroy(true);
     }
 
 }

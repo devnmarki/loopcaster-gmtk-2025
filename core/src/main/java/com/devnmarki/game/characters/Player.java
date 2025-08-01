@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonValue;
 import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.assets.ResourceManager;
@@ -19,12 +18,10 @@ import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.engine.scene.SceneManager;
-import com.devnmarki.engine.ui.Label;
 import com.devnmarki.game.Assets;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
 import com.devnmarki.game.PlayerData;
-import com.devnmarki.game.game_objects.Bullet;
 import com.devnmarki.game.game_objects.MagicWand;
 import com.devnmarki.game.game_objects.PlayerBullet;
 
@@ -184,12 +181,12 @@ public class Player extends Entity {
         if (facingDirection == Direction.Right) {
             magicWand.transform.localPosition.x = transform.localPosition.x - 4f * Engine.gameScale;
             magicWand.transform.localPosition.y = transform.localPosition.y - 2f * Engine.gameScale;
-            shootPoint = new Vector2(magicWand.transform.localPosition.x + 23f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
+            shootPoint = new Vector2(magicWand.transform.localPosition.x + 13f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
         }
         else {
             magicWand.transform.localPosition.x = transform.localPosition.x + 5f * Engine.gameScale;
             magicWand.transform.localPosition.y = transform.localPosition.y - 2f * Engine.gameScale;
-            shootPoint = new Vector2(magicWand.transform.localPosition.x - 11f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
+            shootPoint = new Vector2(magicWand.transform.localPosition.x - 3f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
         }
     }
 
@@ -210,7 +207,6 @@ public class Player extends Entity {
         super.onCollisionEnter(actor, normal, contact);
 
         Vector2 collisionNormal = new Vector2(contact.getWorldManifold().getNormal().x, contact.getWorldManifold().getNormal().y);
-        Debug.log(collisionNormal.convertToString());
 
         if (collisionNormal.y >= 1f) {
             onGround = true;
