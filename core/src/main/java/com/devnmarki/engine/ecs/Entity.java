@@ -20,6 +20,8 @@ public class Entity {
 
     public Transform transform;
 
+    public boolean isUI = false;
+
     public Entity() {
         transform = new Transform();
         addComponent(transform);

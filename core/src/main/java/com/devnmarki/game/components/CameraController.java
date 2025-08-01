@@ -13,7 +13,6 @@ public class CameraController extends Component {
 
     private static final float DAMPING = 10f;
 
-    private Player player;
     private Tilemap tilemap;
     private Camera camera;
 
@@ -24,7 +23,6 @@ public class CameraController extends Component {
     public void start() {
         super.start();
 
-        player = entity.queryFirst(Player.class);
         tilemap = entity.queryFirst(Tilemap.class);
         camera = (Camera) entity;
 
@@ -44,8 +42,8 @@ public class CameraController extends Component {
     private void followPlayer() {
         float lerpSpeed = Gdx.graphics.getDeltaTime() * DAMPING;
 
-        entity.transform.localPosition.x = MathUtils.lerp(entity.transform.localPosition.x, player.transform.localPosition.x + 8f, lerpSpeed);
-        entity.transform.localPosition.y = MathUtils.lerp(entity.transform.localPosition.y, player.transform.localPosition.y + 8f, lerpSpeed);
+        entity.transform.localPosition.x = MathUtils.lerp(entity.transform.localPosition.x, Player.getInstance().transform.localPosition.x + 8f, lerpSpeed);
+        entity.transform.localPosition.y = MathUtils.lerp(entity.transform.localPosition.y, Player.getInstance().transform.localPosition.y + 8f, lerpSpeed);
     }
 
     private void snapCamera() {

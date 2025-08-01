@@ -25,10 +25,11 @@ public class TilemapCollider extends Component {
         super.start();
 
         tilemap = entity.getComponent(TilemapComponent.class);
-
         if (tilemap == null) return;
 
         MapLayer collisionLayer = tilemap.getTiledMap().getLayers().get(layerName);
+        if (collisionLayer == null) return;
+
         MapObjects colliderObjects = collisionLayer.getObjects();
 
         for (MapObject colliderObj : colliderObjects) {

@@ -3,6 +3,7 @@ package com.devnmarki.engine.scene;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.devnmarki.engine.ecs.Entity;
 
@@ -12,7 +13,7 @@ public class Camera extends Entity {
     private float viewportHeight;
 
     private OrthographicCamera orthoCamera;
-    private ExtendViewport viewport;
+    private FitViewport viewport;
 
     public Camera(float viewportWidth, float viewportHeight) {
         this.viewportWidth = viewportWidth;
@@ -24,7 +25,7 @@ public class Camera extends Entity {
         super.onStart();
 
         orthoCamera = new OrthographicCamera(viewportWidth, viewportHeight);
-        viewport = new ExtendViewport(viewportWidth, viewportHeight, orthoCamera);
+        viewport = new FitViewport(viewportWidth, viewportHeight, orthoCamera);
     }
 
     @Override

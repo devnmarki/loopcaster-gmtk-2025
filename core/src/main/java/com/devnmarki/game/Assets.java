@@ -7,6 +7,7 @@ public class Assets {
     public static class Tilemaps {
 
         public static final Tilemap TEST_LEVEL = new Tilemap("levels/test_level.tmx");
+        public static final Tilemap MAIN_MENU_BG = new Tilemap("levels/main_menu_bg.tmx");
 
     }
 

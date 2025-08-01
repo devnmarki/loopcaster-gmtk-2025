@@ -7,7 +7,6 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.assets.ResourceManager;
-import com.devnmarki.engine.ecs.Actor;
 import com.devnmarki.engine.ecs.Entity;
 import com.devnmarki.engine.graphics.SpriteRenderer;
 import com.devnmarki.engine.graphics.Spritesheet;
@@ -17,6 +16,8 @@ import com.devnmarki.engine.input.Input;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
+import com.devnmarki.engine.scene.SceneManager;
+import com.devnmarki.engine.ui.Label;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
 import com.devnmarki.game.game_objects.Bullet;
@@ -28,9 +29,12 @@ import java.util.List;
 
 public class Player extends Entity {
 
+    private static Player INSTANCE;
+
     private static final float MOVE_SPEED = 3f;
     private static final float JUMP_FORCE = 11f;
     private static final float FIRE_RATE = 0.15f;
+    public static final float MAX_MANA = 10f;
 
     private Spritesheet spritesheet;
     private Animator animator;
@@ -45,14 +49,18 @@ public class Player extends Entity {
     private Vector2 shootPoint;
     private float fireRateTimer = 0f;
 
+    private float currentMana;
+
     @Override
     public void onAwake() {
         super.onAwake();
 
+        INSTANCE = this;
+
         spritesheet = new Spritesheet(ResourceManager.loadTexture("sprites/characters/player_sheet.png"), 3, 2, new Vector2(16), false);
 
         addComponent(new SpriteRenderer().setSprite(spritesheet.getSprite(0)));
-        addComponent(new BoxCollider().setSize(new Vector2(7, 14)).setOffset(new Vector2(4, 0)));
+        addComponent(new BoxCollider().setSize(new Vector2(7, 14)).setOffset(new Vector2(6, 0)));
         addComponent(new Rigidbody().setGravityScale(Globals.GRAVITY_SCALE));
         addComponent(new Animator());
     }
@@ -71,6 +79,8 @@ public class Player extends Entity {
 
         magicWand = new MagicWand();
         instantiate(magicWand, transform.localPosition);
+
+        currentMana = MAX_MANA;
     }
 
     private void createInputActions() {
@@ -95,12 +105,12 @@ public class Player extends Entity {
         move();
         updateFacingDirection();
         updateCurrentAnimation();
+        updateMagicWand();
+        updateMana();
 
         if (onGround) {
             jumps = 2;
         }
-
-        updateMagicWand();
     }
 
     private void getInput() {
@@ -152,12 +162,22 @@ public class Player extends Entity {
 
     private void updateMagicWand() {
         if (facingDirection == Direction.Right) {
-            magicWand.transform.localPosition = new Vector2(transform.localPosition.sub(new Vector2(3f, 1f).mul(Engine.gameScale)));
-            shootPoint = new Vector2(magicWand.transform.localPosition.x + 20f * Engine.gameScale, magicWand.transform.localPosition.y + 6f * Engine.gameScale);
+            magicWand.transform.localPosition.x = transform.localPosition.x - 4f * Engine.gameScale;
+            magicWand.transform.localPosition.y = transform.localPosition.y - 2f * Engine.gameScale;
+            shootPoint = new Vector2(magicWand.transform.localPosition.x + 23f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
         }
         else {
-            magicWand.transform.localPosition = new Vector2(transform.localPosition.sub(new Vector2(-4f, 1f).mul(Engine.gameScale)));
-            shootPoint = new Vector2(magicWand.transform.localPosition.x - 10f * Engine.gameScale, magicWand.transform.localPosition.y + 6f * Engine.gameScale);
+            magicWand.transform.localPosition.x = transform.localPosition.x + 5f * Engine.gameScale;
+            magicWand.transform.localPosition.y = transform.localPosition.y - 2f * Engine.gameScale;
+            shootPoint = new Vector2(magicWand.transform.localPosition.x - 11f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
+        }
+    }
+
+    private void updateMana() {
+        currentMana -= Gdx.graphics.getDeltaTime();
+        if (currentMana <= 0f) {
+            die();
+            currentMana = 0f;
         }
     }
 
@@ -179,4 +199,17 @@ public class Player extends Entity {
         Engine.SHAPE_RENDERER.rect(shootPoint.x, shootPoint.y, 4f, 4f);
         Engine.SHAPE_RENDERER.end();
     }
+
+    private void die() {
+        SceneManager.loadScene("death_screen");
+    }
+
+    public static Player getInstance() {
+        return INSTANCE;
+    }
+
+    public float getCurrentMana() {
+        return currentMana;
+    }
+
 }

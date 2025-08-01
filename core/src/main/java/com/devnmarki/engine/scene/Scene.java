@@ -2,7 +2,12 @@ package com.devnmarki.engine.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.ecs.ECSWorld;
 import com.devnmarki.engine.ecs.Entity;
@@ -19,13 +24,17 @@ public abstract class Scene {
     private World physicsWorld = new World(new com.badlogic.gdx.math.Vector2(0f, Engine.gravity), true);
 
     protected Camera camera;
+    protected OrthographicCamera uiCamera;
+
+    private FitViewport uiViewport;
 
     public void enter() {
-        ecsWorld = new ECSWorld();
-
         if (physicsWorld != null) {
+            destroyAllPhysicsBodies();
             physicsWorld.dispose();
+            physicsWorld = null;
         }
+        ecsWorld = new ECSWorld();
         physicsWorld = new World(new com.badlogic.gdx.math.Vector2(0f, Engine.gravity), true);
         physicsWorld.setContactListener(new CollisionContactListener());
 
@@ -33,6 +42,22 @@ public abstract class Scene {
 
         camera = new Camera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.transform.localPosition = new Vector2(camera.getViewportWidth() / 2f, camera.getViewportHeight() / 2f);
+
+        uiCamera = new OrthographicCamera(camera.getViewportWidth(), camera.getViewportHeight());
+        uiViewport = new FitViewport(camera.getViewportWidth(), camera.getViewportHeight(), uiCamera);
+        uiCamera.position.x = camera.getViewportWidth() / 2f;
+        uiCamera.position.y = camera.getViewportHeight() / 2f;
+        uiCamera.update();
+    }
+
+    private void destroyAllPhysicsBodies() {
+        Array<Body> bodies = new Array<>();
+        if (physicsWorld != null) {
+            physicsWorld.getBodies(bodies);
+            for (Body body : bodies) {
+                physicsWorld.destroyBody(body);
+            }
+        }
     }
 
     public void update() {
@@ -42,11 +67,23 @@ public abstract class Scene {
     }
 
     public void debug() { }
-    public void leave() { }
+
+    public void leave() {
+        if (physicsWorld != null) {
+            destroyAllPhysicsBodies();
+            physicsWorld.dispose();
+            physicsWorld = null;
+        }
+    }
 
     public abstract void loadEntities();
 
     public void addEntity(Entity entity) {
+        ecsWorld.addEntity(entity);
+    }
+
+    public void addEntity(Entity entity, Vector2 position) {
+        entity.transform.localPosition = position;
         ecsWorld.addEntity(entity);
     }
 
@@ -76,6 +113,14 @@ public abstract class Scene {
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public OrthographicCamera getUICamera() {
+        return uiCamera;
+    }
+
+    public Viewport getUiViewport() {
+        return uiViewport;
     }
 
 }

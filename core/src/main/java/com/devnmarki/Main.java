@@ -6,6 +6,7 @@ import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.tilemap.TilemapEntityLoader;
 import com.devnmarki.game.characters.Player;
+import com.devnmarki.game.scenes.DeathScreenScene;
 import com.devnmarki.game.scenes.MainMenuScene;
 import com.devnmarki.game.scenes.SampleScene;
 
@@ -23,7 +24,8 @@ public class Main extends ApplicationAdapter {
 
         SceneManager.addScene("sample", new SampleScene());
         SceneManager.addScene("main_menu", new MainMenuScene());
-        SceneManager.loadScene("sample");
+        SceneManager.addScene("death_screen", new DeathScreenScene());
+        SceneManager.loadScene("main_menu");
     }
 
     @Override
