@@ -10,6 +10,7 @@ import com.devnmarki.engine.graphics.SpriteRenderer;
 import com.devnmarki.engine.graphics.Spritesheet;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.Rigidbody;
+import com.devnmarki.game.Globals;
 import com.devnmarki.game.IDamageable;
 import com.devnmarki.game.characters.Player;
 import com.devnmarki.game.game_objects.Bullet;
@@ -40,6 +41,8 @@ public abstract class Enemy extends Entity implements IDamageable {
     @Override
     public void onStart() {
         super.onStart();
+
+        setLayer(Globals.EntityLayers.ENEMY);
 
         spriteRenderer = getComponent(SpriteRenderer.class);
         rigidbody = getComponent(Rigidbody.class);
@@ -86,10 +89,6 @@ public abstract class Enemy extends Entity implements IDamageable {
 
     public void setHealth(int health) {
         this.health = health;
-    }
-
-    public int getHealth() {
-        return health;
     }
 
 }

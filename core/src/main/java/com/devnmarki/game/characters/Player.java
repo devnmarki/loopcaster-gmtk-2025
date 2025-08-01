@@ -68,6 +68,8 @@ public class Player extends Entity {
     public void onStart() {
         super.onStart();
 
+        setLayer(Globals.EntityLayers.PLAYER);
+
         rigidbody = getComponent(Rigidbody.class);
         animator = getComponent(Animator.class);
 

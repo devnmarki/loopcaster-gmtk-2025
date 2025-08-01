@@ -19,8 +19,9 @@ public class Entity {
     private Map<Class<? extends Component>, Component> components = new HashMap<>();
 
     public Transform transform;
-
     public boolean isUI = false;
+
+    private int layer = 0;
 
     public Entity() {
         transform = new Transform();
@@ -79,6 +80,10 @@ public class Entity {
         components.put(type, component);
     }
 
+    public void setLayer(int layer) {
+        this.layer = layer;
+    }
+
     @SuppressWarnings("unchecked")
     public <T extends Component> T getComponent(Class<T> type) {
         for (Component c : components.values()) {
@@ -114,6 +119,10 @@ public class Entity {
 
     public Transform getTransform() {
         return transform;
+    }
+
+    public int getLayer() {
+        return layer;
     }
 
 }

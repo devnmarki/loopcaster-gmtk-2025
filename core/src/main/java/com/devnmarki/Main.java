@@ -3,8 +3,10 @@ package com.devnmarki;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.devnmarki.engine.Engine;
+import com.devnmarki.engine.physics.LayerCollision;
 import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.tilemap.TilemapEntityLoader;
+import com.devnmarki.game.Globals;
 import com.devnmarki.game.characters.Player;
 import com.devnmarki.game.characters.enemies.WatcherEnemy;
 import com.devnmarki.game.scenes.DeathScreenScene;
@@ -20,6 +22,8 @@ public class Main extends ApplicationAdapter {
         super.create();
 
         Engine.gameScale = 4f;
+
+        LayerCollision.setCollision(Globals.EntityLayers.PLAYER, Globals.EntityLayers.ENEMY, false);
 
         TilemapEntityLoader.register("Player", Player.class);
         TilemapEntityLoader.register("WatcherEnemy", WatcherEnemy.class);

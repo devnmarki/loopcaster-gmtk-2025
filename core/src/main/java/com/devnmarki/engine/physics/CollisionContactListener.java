@@ -64,18 +64,18 @@ public class CollisionContactListener implements ContactListener {
         addCollision(entityA, entityB);
         addCollision(entityB, entityA);
 
-//        int layerA = entityA.getLayer();
-//        int layerB = entityB.getLayer();
+        int layerA = entityA.getLayer();
+        int layerB = entityB.getLayer();
 
         Vector2 posA = fa.getBody().getPosition();
         Vector2 posB = fb.getBody().getPosition();
 
         Vector2 normal = posB.cpy().sub(posA).nor();
 
-//        if (!LayerCollision.canCollide(layerA, layerB)){
-//            contact.setEnabled(false);
-//            return;
-//        }
+        if (!LayerCollision.canCollide(layerA, layerB)){
+            contact.setEnabled(false);
+            return;
+        }
 
         entityA.onPreCollision((Entity) fb.getUserData(), new com.devnmarki.engine.math.Vector2(normal.x, normal.y), contact);
 

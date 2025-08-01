@@ -13,4 +13,9 @@ public class Globals {
         public static final Color SECONDARY = new Color(34f/255f, 131f/255f, 153f/255f, 1f);
     }
 
+    public static class EntityLayers {
+        public static final int PLAYER = 1;
+        public static final int ENEMY = 2;
+    }
+
 }
