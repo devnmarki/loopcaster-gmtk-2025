@@ -45,11 +45,9 @@ public class Player extends Entity {
     private Direction facingDirection = Direction.Right;
     private boolean onGround = false;
     private int jumps = 2;
-
     private MagicWand magicWand;
     private Vector2 shootPoint;
     private float fireRateTimer = 0f;
-
     private float currentMana;
 
     @Override
@@ -215,6 +213,10 @@ public class Player extends Entity {
 
     public void increaseMana(float value) {
         currentMana += value;
+    }
+
+    public void damage(float value) {
+        currentMana -= value;
     }
 
     public static Player getInstance() {

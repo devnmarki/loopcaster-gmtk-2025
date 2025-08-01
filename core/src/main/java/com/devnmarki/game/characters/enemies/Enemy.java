@@ -78,6 +78,10 @@ public abstract class Enemy extends Entity implements IDamageable {
         if (actor instanceof Bullet bullet) {
             rigidbody.setVelocity(new Vector2(15f * bullet.getMoveDirection(), rigidbody.getVelocity().y));
         }
+
+        if (actor instanceof Player player) {
+            player.damage(1f);
+        }
     }
 
     public void setHealth(int health) {
