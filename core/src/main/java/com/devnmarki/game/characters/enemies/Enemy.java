@@ -11,6 +11,7 @@ import com.devnmarki.engine.graphics.Spritesheet;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.IDamageable;
+import com.devnmarki.game.characters.Player;
 import com.devnmarki.game.game_objects.Bullet;
 
 public abstract class Enemy extends Entity implements IDamageable {
@@ -67,7 +68,7 @@ public abstract class Enemy extends Entity implements IDamageable {
     }
 
     protected void die() {
-
+        Player.getInstance().increaseMana(2f);
     }
 
     @Override
