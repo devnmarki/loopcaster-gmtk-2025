@@ -44,7 +44,7 @@ public class WatcherEnemy extends Enemy {
 
     private void generateInitialMoveDirection() {
         moveDirection.x = MathUtils.randomBoolean() ? -1f : 1f;
-        moveDirection.y = MathUtils.randomBoolean() ? -0.5f : 0.5f;
+        moveDirection.y = MathUtils.randomBoolean() ? -0.3f : 0.3f;
     }
 
     @Override
