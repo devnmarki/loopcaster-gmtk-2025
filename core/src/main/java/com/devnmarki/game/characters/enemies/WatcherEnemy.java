@@ -69,7 +69,7 @@ public class WatcherEnemy extends Enemy {
         if (collisionNormal.x != 0f) {
             moveDirection.x *= -1f;
         }
-        if (collisionNormal.y != 0f) {
+        else if (collisionNormal.y != 0f) {
             moveDirection.y *= -1f;
         }
     }

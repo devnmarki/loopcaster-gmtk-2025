@@ -35,7 +35,7 @@ public class Player extends Entity {
 
     private static final float MOVE_SPEED = 5f;
     private static final float JUMP_FORCE = 16f;
-    private static final float FIRE_RATE = 0.15f;
+    private static final float FIRE_RATE = 0.12f;
     public static final float MAX_MANA = 10f;
 
     private Spritesheet spritesheet;

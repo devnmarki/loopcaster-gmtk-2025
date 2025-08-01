@@ -10,7 +10,7 @@ import com.devnmarki.game.characters.Player;
 public class PlayerBullet extends Bullet {
 
     public PlayerBullet() {
-        super(Player.getInstance().getFacingDirection(), 12f, 0.5f);
+        super(Player.getInstance().getFacingDirection(), 12f, 0.75f);
     }
 
     @Override
