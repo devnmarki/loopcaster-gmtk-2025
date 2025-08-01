@@ -91,10 +91,10 @@ public class Player extends Entity {
     }
 
     private void createInputActions() {
-        Input.addAction("walk_left", List.of(Keys.LEFT), null);
-        Input.addAction("walk_right", List.of(Keys.RIGHT), null);
-        Input.addAction("jump", List.of(Keys.UP), null);
-        Input.addAction("shoot", List.of(Keys.X), null);
+        Input.addAction("walk_left", List.of(Keys.LEFT, Keys.A), null);
+        Input.addAction("walk_right", List.of(Keys.RIGHT, Keys.D), null);
+        Input.addAction("jump", List.of(Keys.UP, Keys.W), null);
+        Input.addAction("shoot", List.of(Keys.X, Keys.SHIFT_LEFT), null);
     }
 
     private void loadAnimations() {
@@ -209,7 +209,10 @@ public class Player extends Entity {
     public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
         super.onCollisionEnter(actor, normal, contact);
 
-        if (normal.y < 0) {
+        Vector2 collisionNormal = new Vector2(contact.getWorldManifold().getNormal().x, contact.getWorldManifold().getNormal().y);
+        Debug.log(collisionNormal.convertToString());
+
+        if (collisionNormal.y >= 1f) {
             onGround = true;
         }
     }
@@ -227,8 +230,20 @@ public class Player extends Entity {
     }
 
     private void die() {
-        PlayerData data = new PlayerData();
+        PlayerData data;
+
+        if (Gdx.files.local("save/player.json").exists()) {
+            String savedJson = Gdx.files.local("save/player.json").readString();
+            data = new Json().fromJson(PlayerData.class, savedJson);
+        } else {
+            data = new PlayerData();
+        }
+
         data.score = score;
+
+        if (score > data.highscore) {
+            data.highscore = score;
+        }
 
         Json json = new Json();
         Gdx.files.local("save/player.json").writeString(json.toJson(data), false);

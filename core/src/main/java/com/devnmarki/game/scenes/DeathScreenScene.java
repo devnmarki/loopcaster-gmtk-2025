@@ -17,16 +17,19 @@ public class DeathScreenScene extends Scene {
 
     private final Label label;
     private Label scoreText;
+    private Label highscoreText;
 
     public DeathScreenScene() {
         this.label = new Label(Globals.FONT).setFontSize(50).setColor(Globals.Colors.PRIMARY).setContent("U ded loser, press [SPACE] to restart");
         this.scoreText = new Label(Globals.FONT).setFontSize(50).setColor(Globals.Colors.PRIMARY).setContent("Score: 0");
+        this.highscoreText = new Label(Globals.FONT).setFontSize(50).setColor(Globals.Colors.PRIMARY).setContent("Highscore: 0");
     }
 
     @Override
     public void loadEntities() {
         addEntity(label);
         addEntity(scoreText);
+        addEntity(highscoreText);
         addEntity(Assets.Tilemaps.MAIN_MENU_BG);
     }
 
@@ -40,6 +43,8 @@ public class DeathScreenScene extends Scene {
         String playerJson = Gdx.files.local("save/player.json").readString();
         PlayerData data = json.fromJson(PlayerData.class, playerJson);
         scoreText.setContent("Score: " + data.score);
+        highscoreText.setContent("Highscore: " + data.highscore);
+
 
         Assets.Sounds.DEATH.play();
     }
@@ -60,6 +65,11 @@ public class DeathScreenScene extends Scene {
         scoreText.transform.localPosition = new Vector2(
             camera.getViewportWidth() / 2f - scoreText.getWidth() / 2f,
             camera.getViewportHeight() - 64f
+        );
+
+        highscoreText.transform.localPosition = new Vector2(
+            camera.getViewportWidth() / 2f - highscoreText.getWidth() / 2f,
+            camera.getViewportHeight() - 64f - scoreText.getHeight() - 32f
         );
     }
 }
