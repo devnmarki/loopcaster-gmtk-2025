@@ -1,7 +1,5 @@
 package com.devnmarki.game.ui;
 
-import com.badlogic.gdx.graphics.Color;
-import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.ui.Box;
@@ -26,12 +24,12 @@ public class ManaBar extends Widget {
             (Box) new Box()
                 .setSize(new Vector2(width, 32))
                 .setColor(Globals.Colors.PRIMARY)
-                .setLayer(200);
+                .setRenderingLayer(200);
         manaBarBg =
             (Box) new Box()
                 .setSize(manaBarFill.getSize())
                 .setColor(Globals.Colors.SECONDARY)
-                .setLayer(100);
+                .setRenderingLayer(100);
         currentManaText =
             (Label) new Label(Globals.FONT)
                 .setColor(Globals.Colors.PRIMARY)
@@ -39,7 +37,7 @@ public class ManaBar extends Widget {
                 .setBorderColor(Globals.Colors.SECONDARY)
                 .setBorderWidth(2f)
                 .setContent("10s")
-                .setLayer(300);
+                .setRenderingLayer(300);
 
         instantiate(currentManaText, transform.localPosition);
         instantiate(manaBarBg, manaBarFill.transform.localPosition);

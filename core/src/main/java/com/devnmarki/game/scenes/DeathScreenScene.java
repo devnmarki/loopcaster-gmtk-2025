@@ -6,6 +6,7 @@ import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.scene.Scene;
 import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.ui.Label;
+import com.devnmarki.game.Assets;
 import com.devnmarki.game.Globals;
 
 public class DeathScreenScene extends Scene {
@@ -26,6 +27,8 @@ public class DeathScreenScene extends Scene {
         super.enter();
 
         addEntity(camera);
+
+        Assets.Sounds.DEATH.play();
     }
 
     @Override

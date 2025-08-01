@@ -19,8 +19,9 @@ public class Entity {
     private Map<Class<? extends Component>, Component> components = new HashMap<>();
 
     public Transform transform;
-
     public boolean isUI = false;
+
+    private int layer = 0;
 
     public Entity() {
         transform = new Transform();
@@ -51,7 +52,7 @@ public class Entity {
         }
     }
 
-    protected void instantiate(Entity newEntity, Vector2 newPosition) {
+    public void instantiate(Entity newEntity, Vector2 newPosition) {
         newEntity.transform.localPosition = newPosition;
         SceneManager.currentScene.addEntity(newEntity);
     }
@@ -77,6 +78,10 @@ public class Entity {
         component.setEntity(this);
 
         components.put(type, component);
+    }
+
+    public void setLayer(int layer) {
+        this.layer = layer;
     }
 
     @SuppressWarnings("unchecked")
@@ -114,6 +119,10 @@ public class Entity {
 
     public Transform getTransform() {
         return transform;
+    }
+
+    public int getLayer() {
+        return layer;
     }
 
 }

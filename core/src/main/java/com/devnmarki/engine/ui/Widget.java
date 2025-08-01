@@ -12,7 +12,7 @@ public abstract class Widget extends Entity {
 
     public void onRender() { }
 
-    public Widget setLayer(int layer) {
+    public Widget setRenderingLayer(int layer) {
         this.layer = layer;
 
         return this;

@@ -18,10 +18,12 @@ import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.ui.Label;
+import com.devnmarki.game.Assets;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
 import com.devnmarki.game.game_objects.Bullet;
 import com.devnmarki.game.game_objects.MagicWand;
+import com.devnmarki.game.game_objects.PlayerBullet;
 
 import static com.badlogic.gdx.Input.*;
 
@@ -31,8 +33,8 @@ public class Player extends Entity {
 
     private static Player INSTANCE;
 
-    private static final float MOVE_SPEED = 3f;
-    private static final float JUMP_FORCE = 11f;
+    private static final float MOVE_SPEED = 5f;
+    private static final float JUMP_FORCE = 16f;
     private static final float FIRE_RATE = 0.15f;
     public static final float MAX_MANA = 10f;
 
@@ -44,11 +46,9 @@ public class Player extends Entity {
     private Direction facingDirection = Direction.Right;
     private boolean onGround = false;
     private int jumps = 2;
-
     private MagicWand magicWand;
     private Vector2 shootPoint;
     private float fireRateTimer = 0f;
-
     private float currentMana;
 
     @Override
@@ -68,6 +68,8 @@ public class Player extends Entity {
     @Override
     public void onStart() {
         super.onStart();
+
+        setLayer(Globals.EntityLayers.PLAYER);
 
         rigidbody = getComponent(Rigidbody.class);
         animator = getComponent(Animator.class);
@@ -133,13 +135,19 @@ public class Player extends Entity {
     private void jump() {
         rigidbody.setVelocity(new Vector2(rigidbody.getVelocity().x, JUMP_FORCE));
 
+        Assets.Sounds.JUMP.play();
+
         jumps--;
         if (jumps == 1)
             onGround = false;
     }
 
     private void shoot() {
-        instantiate(new Bullet(facingDirection), shootPoint);
+        if (shootPoint == null) return;
+
+        Assets.Sounds.SHOOT.play(1f);
+
+        instantiate(new PlayerBullet(), shootPoint);
         fireRateTimer = 0f;
     }
 
@@ -179,6 +187,10 @@ public class Player extends Entity {
             die();
             currentMana = 0f;
         }
+
+        if (currentMana >= MAX_MANA) {
+            currentMana = MAX_MANA;
+        }
     }
 
     @Override
@@ -194,6 +206,8 @@ public class Player extends Entity {
     public void onDebug() {
         super.onDebug();
 
+        if (shootPoint == null) return;
+
         Engine.SHAPE_RENDERER.begin(ShapeRenderer.ShapeType.Filled);
         Engine.SHAPE_RENDERER.setColor(Color.RED);
         Engine.SHAPE_RENDERER.rect(shootPoint.x, shootPoint.y, 4f, 4f);
@@ -201,7 +215,15 @@ public class Player extends Entity {
     }
 
     private void die() {
-        SceneManager.loadScene("death_screen");
+        SceneManager.queueScene("death_screen");
+    }
+
+    public void increaseMana(float value) {
+        currentMana += value;
+    }
+
+    public void damage(float value) {
+        currentMana -= value;
     }
 
     public static Player getInstance() {
@@ -210,6 +232,10 @@ public class Player extends Entity {
 
     public float getCurrentMana() {
         return currentMana;
+    }
+
+    public Direction getFacingDirection() {
+        return facingDirection;
     }
 
 }

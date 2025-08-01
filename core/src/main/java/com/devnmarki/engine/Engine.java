@@ -14,7 +14,7 @@ public class Engine {
     public static final SpriteBatch SPRITE_BATCH = new SpriteBatch();
     public static final SpriteBatch UI_SPRITE_BATCH = new SpriteBatch();
     public static final ShapeRenderer SHAPE_RENDERER = new ShapeRenderer();
-    public static final float PPM = 100f;
+    public static final float PPM = 64f;
 
     public static float gameScale = 1f;
     public static float gravity = -9.81f;

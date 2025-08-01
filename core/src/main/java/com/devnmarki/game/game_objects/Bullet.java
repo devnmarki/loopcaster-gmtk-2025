@@ -11,14 +11,15 @@ import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.Direction;
+import com.devnmarki.game.IDamageable;
+import com.devnmarki.game.characters.enemies.Enemy;
 
 public class Bullet extends Entity {
 
-    private static final float LIFETIME = 0.5f;
-    private static final float SPEED = 8.5f;
-
     private final Sprite sprite;
     private final Direction facingDirection;
+    private final float speed;
+    private final float lifetime;
 
     private Rigidbody rigidbody;
     private float moveDirection = 0f;
@@ -26,9 +27,11 @@ public class Bullet extends Entity {
     private float currentLifetime = 0f;
     private boolean shouldDestroy = false;
 
-    public Bullet(Direction facingDirection) {
+    public Bullet(Direction facingDirection, float speed, float lifetime) {
         this.sprite = new Sprite(ResourceManager.loadTexture("sprites/game_objects/bullet.png"));
         this.facingDirection = facingDirection;
+        this.speed = speed;
+        this.lifetime = lifetime;
     }
 
     @Override
@@ -61,7 +64,7 @@ public class Bullet extends Entity {
 
     private void updateCurrentLifetime() {
         currentLifetime += Gdx.graphics.getDeltaTime();
-        if (currentLifetime >= LIFETIME) {
+        if (currentLifetime >= lifetime) {
             EntityDestroyer.queue(this);
         }
     }
@@ -69,13 +72,15 @@ public class Bullet extends Entity {
     private void move() {
         moveDirection = facingDirection == Direction.Right ? 1f : -1f;
 
-        rigidbody.setVelocity(new Vector2(moveDirection * SPEED, rigidbody.getVelocity().y));
+        rigidbody.setVelocity(new Vector2(moveDirection * speed, rigidbody.getVelocity().y));
     }
 
-    @Override
-    public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
-        super.onCollisionEnter(actor, normal, contact);
-
-        shouldDestroy = true;
+    public void setShouldDestroy(boolean shouldDestroy) {
+        this.shouldDestroy = shouldDestroy;
     }
+
+    public float getMoveDirection() {
+        return moveDirection;
+    }
+
 }
