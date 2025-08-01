@@ -27,7 +27,7 @@ public class WatcherEnemy extends Enemy {
     public void onAwake() {
         super.onAwake();
 
-        setHealth(4);
+        setHealth(3);
 
         addComponent(new BoxCollider().setSize(new Vector2(13f, 9f)).setOffset(new Vector2(3.5f, 7f)));
     }

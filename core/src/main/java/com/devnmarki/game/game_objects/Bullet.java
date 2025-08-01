@@ -16,11 +16,10 @@ import com.devnmarki.game.characters.enemies.Enemy;
 
 public class Bullet extends Entity {
 
-    private static final float LIFETIME = 0.5f;
-    private static final float SPEED = 12f;
-
     private final Sprite sprite;
     private final Direction facingDirection;
+    private final float speed;
+    private final float lifetime;
 
     private Rigidbody rigidbody;
     private float moveDirection = 0f;
@@ -28,9 +27,11 @@ public class Bullet extends Entity {
     private float currentLifetime = 0f;
     private boolean shouldDestroy = false;
 
-    public Bullet(Direction facingDirection) {
+    public Bullet(Direction facingDirection, float speed, float lifetime) {
         this.sprite = new Sprite(ResourceManager.loadTexture("sprites/game_objects/bullet.png"));
         this.facingDirection = facingDirection;
+        this.speed = speed;
+        this.lifetime = lifetime;
     }
 
     @Override
@@ -63,7 +64,7 @@ public class Bullet extends Entity {
 
     private void updateCurrentLifetime() {
         currentLifetime += Gdx.graphics.getDeltaTime();
-        if (currentLifetime >= LIFETIME) {
+        if (currentLifetime >= lifetime) {
             EntityDestroyer.queue(this);
         }
     }
@@ -71,7 +72,7 @@ public class Bullet extends Entity {
     private void move() {
         moveDirection = facingDirection == Direction.Right ? 1f : -1f;
 
-        rigidbody.setVelocity(new Vector2(moveDirection * SPEED, rigidbody.getVelocity().y));
+        rigidbody.setVelocity(new Vector2(moveDirection * speed, rigidbody.getVelocity().y));
     }
 
     public void setShouldDestroy(boolean shouldDestroy) {
@@ -81,4 +82,5 @@ public class Bullet extends Entity {
     public float getMoveDirection() {
         return moveDirection;
     }
+
 }
