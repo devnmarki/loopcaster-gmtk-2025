@@ -4,7 +4,8 @@ import com.devnmarki.engine.scene.Scene;
 import com.devnmarki.game.Assets;
 import com.devnmarki.game.GameManager;
 import com.devnmarki.game.components.CameraController;
-import com.devnmarki.game.ui.ManaBar;
+import com.devnmarki.game.ui.ManaBarUI;
+import com.devnmarki.game.ui.ScoreUI;
 
 public class SampleScene extends Scene {
 
@@ -12,7 +13,8 @@ public class SampleScene extends Scene {
     public void loadEntities() {
         addEntity(Assets.Tilemaps.TEST_LEVEL);
         addEntity(new GameManager());
-        addEntity(new ManaBar());
+        addEntity(new ManaBarUI());
+        addEntity(new ScoreUI());
     }
 
     @Override

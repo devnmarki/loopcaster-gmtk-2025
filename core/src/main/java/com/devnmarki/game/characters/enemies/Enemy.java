@@ -80,6 +80,7 @@ public abstract class Enemy extends Entity implements IDamageable {
 
     protected void die() {
         Player.getInstance().increaseMana(2f);
+        Player.getInstance().increaseScore(100);
     }
 
     @Override

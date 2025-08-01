@@ -11,7 +11,7 @@ import com.devnmarki.engine.ui.Widget;
 import com.devnmarki.game.Globals;
 import com.devnmarki.game.characters.Player;
 
-public class ManaBar extends Widget {
+public class ManaBarUI extends Widget {
 
     private Box manaBarFill;
     private Box manaBarBg;

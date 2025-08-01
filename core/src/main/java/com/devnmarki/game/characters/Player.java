@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonValue;
 import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.assets.ResourceManager;
@@ -21,6 +23,7 @@ import com.devnmarki.engine.ui.Label;
 import com.devnmarki.game.Assets;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
+import com.devnmarki.game.PlayerData;
 import com.devnmarki.game.game_objects.Bullet;
 import com.devnmarki.game.game_objects.MagicWand;
 import com.devnmarki.game.game_objects.PlayerBullet;
@@ -51,6 +54,7 @@ public class Player extends Entity {
     private float fireRateTimer = 0f;
     private float currentMana;
     private float hitEffectTimer = 0f;
+    private int score = 0;
 
     @Override
     public void onAwake() {
@@ -223,11 +227,21 @@ public class Player extends Entity {
     }
 
     private void die() {
+        PlayerData data = new PlayerData();
+        data.score = score;
+
+        Json json = new Json();
+        Gdx.files.local("save/player.json").writeString(json.toJson(data), false);
+
         SceneManager.queueScene("death_screen");
     }
 
     public void increaseMana(float value) {
         currentMana += value;
+    }
+
+    public void increaseScore(int value) {
+        score += value;
     }
 
     public void damage(float value) {
@@ -248,4 +262,7 @@ public class Player extends Entity {
         return facingDirection;
     }
 
+    public int getScore() {
+        return score;
+    }
 }
