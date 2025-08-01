@@ -12,6 +12,7 @@ import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.IDamageable;
+import com.devnmarki.game.characters.enemies.Enemy;
 
 public class Bullet extends Entity {
 
@@ -73,14 +74,11 @@ public class Bullet extends Entity {
         rigidbody.setVelocity(new Vector2(moveDirection * SPEED, rigidbody.getVelocity().y));
     }
 
-    @Override
-    public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
-        super.onCollisionEnter(actor, normal, contact);
+    public void setShouldDestroy(boolean shouldDestroy) {
+        this.shouldDestroy = shouldDestroy;
+    }
 
-        if (actor instanceof IDamageable) {
-            ((IDamageable) actor).onDamage(1);
-        }
-
-        shouldDestroy = true;
+    public float getMoveDirection() {
+        return moveDirection;
     }
 }

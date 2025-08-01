@@ -22,6 +22,7 @@ import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
 import com.devnmarki.game.game_objects.Bullet;
 import com.devnmarki.game.game_objects.MagicWand;
+import com.devnmarki.game.game_objects.PlayerBullet;
 
 import static com.badlogic.gdx.Input.*;
 
@@ -141,7 +142,7 @@ public class Player extends Entity {
     private void shoot() {
         if (shootPoint == null) return;
 
-        instantiate(new Bullet(facingDirection), shootPoint);
+        instantiate(new PlayerBullet(), shootPoint);
         fireRateTimer = 0f;
     }
 
@@ -214,6 +215,10 @@ public class Player extends Entity {
 
     public float getCurrentMana() {
         return currentMana;
+    }
+
+    public Direction getFacingDirection() {
+        return facingDirection;
     }
 
 }

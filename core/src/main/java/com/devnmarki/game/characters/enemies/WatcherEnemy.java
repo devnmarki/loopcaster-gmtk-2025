@@ -17,8 +17,7 @@ public class WatcherEnemy extends Enemy {
 
     private static final float MOVE_SPEED = 3f;
 
-    private Rigidbody rigidbody;
-    private Vector2 moveDirection = new Vector2(0f, 0f);
+    private final Vector2 moveDirection = new Vector2(0f, 0f);
 
     public WatcherEnemy() {
         super(ResourceManager.loadTexture("sprites/characters/watcher.png"));
@@ -37,7 +36,6 @@ public class WatcherEnemy extends Enemy {
     public void onStart() {
         super.onStart();
 
-        rigidbody = getComponent(Rigidbody.class);
         rigidbody.setGravityScale(0f);
 
         generateInitialMoveDirection();

@@ -3,6 +3,7 @@ package com.devnmarki.game.characters.enemies;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.physics.box2d.Contact;
 import com.devnmarki.engine.ecs.Entity;
 import com.devnmarki.engine.graphics.Sprite;
 import com.devnmarki.engine.graphics.SpriteRenderer;
@@ -10,11 +11,14 @@ import com.devnmarki.engine.graphics.Spritesheet;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.game.IDamageable;
+import com.devnmarki.game.game_objects.Bullet;
 
 public abstract class Enemy extends Entity implements IDamageable {
 
     private final Spritesheet spritesheet;
+
     protected SpriteRenderer spriteRenderer;
+    protected Rigidbody rigidbody;
 
     private int health = 1;
 
@@ -37,6 +41,7 @@ public abstract class Enemy extends Entity implements IDamageable {
         super.onStart();
 
         spriteRenderer = getComponent(SpriteRenderer.class);
+        rigidbody = getComponent(Rigidbody.class);
     }
 
     @Override
@@ -63,6 +68,15 @@ public abstract class Enemy extends Entity implements IDamageable {
 
     protected void die() {
 
+    }
+
+    @Override
+    public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
+        super.onCollisionEnter(actor, normal, contact);
+
+        if (actor instanceof Bullet bullet) {
+            rigidbody.setVelocity(new Vector2(15f * bullet.getMoveDirection(), rigidbody.getVelocity().y));
+        }
     }
 
     public void setHealth(int health) {
