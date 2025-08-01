@@ -33,7 +33,7 @@ public class MainMenuScene extends Scene {
         super.update();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-            SceneManager.loadScene("sample");
+            SceneManager.queueScene("sample");
         }
 
         welcomeText.transform.localPosition = new Vector2(

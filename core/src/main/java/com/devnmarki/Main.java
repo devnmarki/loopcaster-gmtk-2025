@@ -57,9 +57,9 @@ public class Main extends ApplicationAdapter {
         }
 
         if (Gdx.input.isKeyJustPressed(Keys.Q)) {
-            SceneManager.loadScene("main_menu");
+            SceneManager.queueScene("main_menu");
         } else if (Gdx.input.isKeyJustPressed(Keys.E)) {
-            SceneManager.loadScene("sample");
+            SceneManager.queueScene("sample");
         }
     }
 

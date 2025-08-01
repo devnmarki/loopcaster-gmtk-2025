@@ -17,7 +17,7 @@ public class EnemySpawner extends Component {
     private static final float MAX_WAIT_TIME = 3.5f;
 
     private List<Entity> spawnPoints = new ArrayList<>();
-    private List<Class<? extends Enemy>> enemyTypes = new ArrayList<>();
+    private final List<Class<? extends Enemy>> enemyTypes = new ArrayList<>();
 
     private float waitTimeTimer = 0f;
     private int enemyIndex;

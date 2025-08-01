@@ -215,7 +215,7 @@ public class Player extends Entity {
     }
 
     private void die() {
-        SceneManager.loadScene("death_screen");
+        SceneManager.queueScene("death_screen");
     }
 
     public void increaseMana(float value) {

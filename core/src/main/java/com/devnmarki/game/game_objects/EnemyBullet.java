@@ -19,6 +19,8 @@ public class EnemyBullet extends Bullet {
         if (actor instanceof Player) {
             Player.getInstance().damage(1f);
         }
+
+        setShouldDestroy(true);
     }
 
 }

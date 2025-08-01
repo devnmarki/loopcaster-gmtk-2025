@@ -13,6 +13,8 @@ public class SceneManager {
     private static Scene previousScene = null;
     private static Box2DDebugRenderer physicsDebugRenderer = new Box2DDebugRenderer();
 
+    private static String queuedSceneName = null;
+
     public static void addScene(String sceneName, Scene scene) {
         scenes.put(sceneName, scene);
     }
@@ -38,6 +40,20 @@ public class SceneManager {
         if (Engine.debugMode) {
             Engine.SPRITE_BATCH.setProjectionMatrix(currentScene.getCamera().getProjection());
             physicsDebugRenderer.render(currentScene.getPhysicsWorld(), Engine.SPRITE_BATCH.getProjectionMatrix().cpy().scale(Engine.PPM, Engine.PPM, 1));
+        }
+
+        flushSceneChange();
+    }
+
+    public static void queueScene(String sceneName) {
+        queuedSceneName = sceneName;
+    }
+
+
+    private static void flushSceneChange() {
+        if (queuedSceneName != null) {
+            loadScene(queuedSceneName);
+            queuedSceneName = null;
         }
     }
 
