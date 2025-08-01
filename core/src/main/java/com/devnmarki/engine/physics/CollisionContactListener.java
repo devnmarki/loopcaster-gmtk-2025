@@ -73,14 +73,13 @@ public class CollisionContactListener implements ContactListener {
         Vector2 normal = posB.cpy().sub(posA).nor();
 
         if (!LayerCollision.canCollide(layerA, layerB)){
+            entityA.onPreCollision((Entity) fb.getUserData(), new com.devnmarki.engine.math.Vector2(normal.x, normal.y), contact);
+
+            Vector2 flipped = normal.cpy().scl(-1);
+            entityB.onPreCollision((Entity) fa.getUserData(), new com.devnmarki.engine.math.Vector2(flipped.x, flipped.y), contact);
+
             contact.setEnabled(false);
-            return;
         }
-
-        entityA.onPreCollision((Entity) fb.getUserData(), new com.devnmarki.engine.math.Vector2(normal.x, normal.y), contact);
-
-        Vector2 flipped = normal.cpy().scl(-1);
-        entityB.onPreCollision((Entity) fa.getUserData(), new com.devnmarki.engine.math.Vector2(flipped.x, flipped.y), contact);
     }
 
     @Override
@@ -105,20 +104,20 @@ public class CollisionContactListener implements ContactListener {
         entityB.onPostCollision((Entity) fa.getUserData(), new com.devnmarki.engine.math.Vector2(flipped.x, flipped.y), contact);
     }
 
-//    public void dispatchCollisionStayEvents() {
-//        for (ObjectMap.Entry<Actor, Array<Actor>> entry : collisions.entries()) {
-//            Actor a = entry.key;
-//            Array<Actor> collidedEntities = entry.value;
-//
-//            for (Actor b : collidedEntities) {
-//                addCollision(a, b);
-//                addCollision(b, a);
-//
-//                com.devnmarki.engine.math.Vector2 normal = b.getTransform().position.cpy().sub(a.getTransform().position).nor();
-//                a.onCollisionStay(b, normal);
-//            }
-//        }
-//    }
+    public void dispatchCollisionStayEvents() {
+        for (ObjectMap.Entry<Entity, Array<Entity>> entry : collisions.entries()) {
+            Entity a = entry.key;
+            Array<Entity> collidedEntities = entry.value;
+
+            for (Entity b : collidedEntities) {
+                addCollision(a, b);
+                addCollision(b, a);
+
+                com.devnmarki.engine.math.Vector2 normal = b.getTransform().localPosition.cpy().sub(a.getTransform().localPosition).nor();
+                a.onCollisionStay(b, normal);
+            }
+        }
+    }
 
     private void addCollision(Entity a, Entity b) {
         collisions.put(a, new Array<Entity>());

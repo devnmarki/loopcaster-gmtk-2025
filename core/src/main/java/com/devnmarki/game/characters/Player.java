@@ -50,6 +50,7 @@ public class Player extends Entity {
     private Vector2 shootPoint;
     private float fireRateTimer = 0f;
     private float currentMana;
+    private float hitEffectTimer = 0f;
 
     @Override
     public void onAwake() {
@@ -57,7 +58,7 @@ public class Player extends Entity {
 
         INSTANCE = this;
 
-        spritesheet = new Spritesheet(ResourceManager.loadTexture("sprites/characters/player_sheet.png"), 3, 2, new Vector2(16), false);
+        spritesheet = new Spritesheet(ResourceManager.loadTexture("sprites/characters/player_sheet.png"), 3, 3, new Vector2(16), false);
 
         addComponent(new SpriteRenderer().setSprite(spritesheet.getSprite(0)));
         addComponent(new BoxCollider().setSize(new Vector2(7, 14)).setOffset(new Vector2(6, 0)));
@@ -97,6 +98,8 @@ public class Player extends Entity {
         animator.addAnimation("idle_left", new Animation(spritesheet, new int[] { 0 }, 0.1f, true, true));
         animator.addAnimation("walk_right", new Animation(spritesheet, new int[] { 3, 4, 5 }, 0.15f, true, false));
         animator.addAnimation("walk_left", new Animation(spritesheet, new int[] { 3, 4, 5 }, 0.15f, true, true));
+        animator.addAnimation("hurt_right", new Animation(spritesheet, new int[] { 6 }, 0.1f, true, false));
+        animator.addAnimation("hurt_left", new Animation(spritesheet, new int[] { 6 }, 0.1f, true, true));
     }
 
     @Override
@@ -160,12 +163,17 @@ public class Player extends Entity {
     }
 
     private void updateCurrentAnimation() {
-        String animName = facingDirection.toString().toLowerCase();
+        String animDirection = facingDirection.toString().toLowerCase();
 
-        if (input == 0f)
-            animator.play("idle_" + animName);
-        else
-            animator.play("walk_" + animName);
+        if (hitEffectTimer > 0f) {
+            hitEffectTimer -= Gdx.graphics.getDeltaTime();
+            animator.play("hurt_" + animDirection);
+        } else {
+            if (input == 0f)
+                animator.play("idle_" + animDirection);
+            else
+                animator.play("walk_" + animDirection);
+        }
     }
 
     private void updateMagicWand() {
@@ -224,6 +232,8 @@ public class Player extends Entity {
 
     public void damage(float value) {
         currentMana -= value;
+        hitEffectTimer = 0.15f;
+        Assets.Sounds.PLAYER_HURT.play();
     }
 
     public static Player getInstance() {

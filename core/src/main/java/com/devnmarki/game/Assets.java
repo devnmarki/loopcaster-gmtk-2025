@@ -17,6 +17,7 @@ public class Assets {
         public static final Sound JUMP = ResourceManager.loadSound("sfx/jump.wav");
         public static final Sound SHOOT = ResourceManager.loadSound("sfx/shoot.wav");
         public static final Sound HURT = ResourceManager.loadSound("sfx/hurt.wav");
+        public static final Sound PLAYER_HURT = ResourceManager.loadSound("sfx/player_hurt.wav");
     }
 
 }

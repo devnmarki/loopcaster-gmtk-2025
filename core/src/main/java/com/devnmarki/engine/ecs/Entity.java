@@ -69,6 +69,7 @@ public class Entity {
     public void onCollisionExit(Entity actor) { }
     public void onPreCollision(Entity actor, Vector2 normal, Contact contact) { }
     public void onPostCollision(Entity actor, Vector2 normal, Contact contact) { }
+    public void onCollisionStay(Entity actor, Vector2 normal) { }
 
     public <T extends Component> void addComponent(T component) {
         Class<? extends Component> type = component.getClass();
