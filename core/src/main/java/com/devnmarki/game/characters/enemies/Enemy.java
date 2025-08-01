@@ -15,6 +15,7 @@ import com.devnmarki.game.Globals;
 import com.devnmarki.game.IDamageable;
 import com.devnmarki.game.characters.Player;
 import com.devnmarki.game.game_objects.Bullet;
+import com.devnmarki.game.game_objects.PlayerBullet;
 
 public abstract class Enemy extends Entity implements IDamageable {
 
@@ -81,7 +82,7 @@ public abstract class Enemy extends Entity implements IDamageable {
     public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
         super.onCollisionEnter(actor, normal, contact);
 
-        if (actor instanceof Bullet bullet) {
+        if (actor instanceof PlayerBullet bullet) {
             rigidbody.setVelocity(new Vector2(knockback * bullet.getMoveDirection(), rigidbody.getVelocity().y));
         }
 
