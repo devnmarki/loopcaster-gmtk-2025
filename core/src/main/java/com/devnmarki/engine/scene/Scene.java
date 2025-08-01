@@ -2,7 +2,9 @@ package com.devnmarki.engine.scene;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -27,11 +29,12 @@ public abstract class Scene {
     private FitViewport uiViewport;
 
     public void enter() {
-        ecsWorld = new ECSWorld();
-
         if (physicsWorld != null) {
+            destroyAllPhysicsBodies();
             physicsWorld.dispose();
+            physicsWorld = null;
         }
+        ecsWorld = new ECSWorld();
         physicsWorld = new World(new com.badlogic.gdx.math.Vector2(0f, Engine.gravity), true);
         physicsWorld.setContactListener(new CollisionContactListener());
 
@@ -47,6 +50,16 @@ public abstract class Scene {
         uiCamera.update();
     }
 
+    private void destroyAllPhysicsBodies() {
+        Array<Body> bodies = new Array<>();
+        if (physicsWorld != null) {
+            physicsWorld.getBodies(bodies);
+            for (Body body : bodies) {
+                physicsWorld.destroyBody(body);
+            }
+        }
+    }
+
     public void update() {
         physicsWorld.step(1 / 60f, 6, 2);
 
@@ -54,7 +67,14 @@ public abstract class Scene {
     }
 
     public void debug() { }
-    public void leave() { }
+
+    public void leave() {
+        if (physicsWorld != null) {
+            destroyAllPhysicsBodies();
+            physicsWorld.dispose();
+            physicsWorld = null;
+        }
+    }
 
     public abstract void loadEntities();
 
