@@ -14,12 +14,13 @@ public class DeathScreenScene extends Scene {
     private final Label label;
 
     public DeathScreenScene() {
-        this.label = new Label(Globals.FONT).setFontSize(50).setColor(Globals.Colors.PRIMARY).setContent("U ded loser, press SPACE to restart");
+        this.label = new Label(Globals.FONT).setFontSize(50).setColor(Globals.Colors.PRIMARY).setContent("U ded loser, press [SPACE] to restart");
     }
 
     @Override
     public void loadEntities() {
         addEntity(label);
+        addEntity(Assets.Tilemaps.MAIN_MENU_BG);
     }
 
     @Override

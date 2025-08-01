@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.utils.Align;
 import com.devnmarki.engine.Engine;
 
 public class Label extends Widget {
@@ -20,6 +21,7 @@ public class Label extends Widget {
     private Color color = Color.WHITE;
     private float borderWidth = 0f;
     private Color borderColor = Color.BLACK;
+    private int alignment = Align.left;
 
     public Label(String fontPath) {
         this.fontPath = fontPath;
@@ -31,7 +33,7 @@ public class Label extends Widget {
     public void onUpdate() {
         super.onUpdate();
 
-        layout.setText(font, content);
+        layout.setText(font, content, color, 0, alignment, false);
     }
 
     @Override
@@ -91,6 +93,12 @@ public class Label extends Widget {
     public Label setBorderColor(Color borderColor) {
         this.borderColor = borderColor;
         generateFont();
+
+        return this;
+    }
+
+    public Label setAlignment(int alignment) {
+        this.alignment = alignment;
 
         return this;
     }

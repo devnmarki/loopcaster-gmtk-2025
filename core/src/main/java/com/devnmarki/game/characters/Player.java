@@ -89,7 +89,7 @@ public class Player extends Entity {
     private void createInputActions() {
         Input.addAction("walk_left", List.of(Keys.LEFT), null);
         Input.addAction("walk_right", List.of(Keys.RIGHT), null);
-        Input.addAction("jump", List.of(Keys.Z), null);
+        Input.addAction("jump", List.of(Keys.UP), null);
         Input.addAction("shoot", List.of(Keys.X), null);
     }
 
