@@ -1,5 +1,7 @@
 package com.devnmarki.engine.assets;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -8,13 +10,12 @@ import java.util.Map;
 
 public class ResourceManager {
 
-    private static Map<String, TextureRegion> textures = new HashMap<String, TextureRegion>();
-
     public static TextureRegion loadTexture(String texturePath) {
-        TextureRegion tex = new TextureRegion(new Texture(texturePath));
-        textures.put(texturePath, tex);
+        return new TextureRegion(new Texture(texturePath));
+    }
 
-        return tex;
+    public static Sound loadSound(String soundPath) {
+        return Gdx.audio.newSound(Gdx.files.internal(soundPath));
     }
 
 }

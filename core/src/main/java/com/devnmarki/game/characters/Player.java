@@ -18,6 +18,7 @@ import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.ui.Label;
+import com.devnmarki.game.Assets;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
 import com.devnmarki.game.game_objects.Bullet;
@@ -134,6 +135,8 @@ public class Player extends Entity {
     private void jump() {
         rigidbody.setVelocity(new Vector2(rigidbody.getVelocity().x, JUMP_FORCE));
 
+        Assets.Sounds.JUMP.play();
+
         jumps--;
         if (jumps == 1)
             onGround = false;
@@ -141,6 +144,8 @@ public class Player extends Entity {
 
     private void shoot() {
         if (shootPoint == null) return;
+
+        Assets.Sounds.SHOOT.play(1f);
 
         instantiate(new PlayerBullet(), shootPoint);
         fireRateTimer = 0f;

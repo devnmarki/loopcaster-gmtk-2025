@@ -36,7 +36,8 @@ public class WatcherEnemy extends Enemy {
     public void onStart() {
         super.onStart();
 
-        rigidbody.setGravityScale(0f);
+        this.rigidbody.setGravityScale(0f);
+        this.setKnockback(15f);
 
         generateInitialMoveDirection();
     }

@@ -8,6 +8,7 @@ import com.devnmarki.engine.scene.SceneManager;
 import com.devnmarki.engine.tilemap.TilemapEntityLoader;
 import com.devnmarki.game.Globals;
 import com.devnmarki.game.characters.Player;
+import com.devnmarki.game.characters.enemies.MushroomEnemy;
 import com.devnmarki.game.characters.enemies.WatcherEnemy;
 import com.devnmarki.game.scenes.DeathScreenScene;
 import com.devnmarki.game.scenes.MainMenuScene;
@@ -24,9 +25,11 @@ public class Main extends ApplicationAdapter {
         Engine.gameScale = 4f;
 
         LayerCollision.setCollision(Globals.EntityLayers.PLAYER, Globals.EntityLayers.ENEMY, false);
+        LayerCollision.setCollision(Globals.EntityLayers.ENEMY, Globals.EntityLayers.ENEMY, false);
 
         TilemapEntityLoader.register("Player", Player.class);
-        TilemapEntityLoader.register("WatcherEnemy", WatcherEnemy.class);
+        TilemapEntityLoader.register("Watcher Enemy", WatcherEnemy.class);
+        TilemapEntityLoader.register("Mushroom Enemy", MushroomEnemy.class);
 
         SceneManager.addScene("sample", new SampleScene());
         SceneManager.addScene("main_menu", new MainMenuScene());

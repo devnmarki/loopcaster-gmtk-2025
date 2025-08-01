@@ -10,6 +10,7 @@ import com.devnmarki.engine.graphics.SpriteRenderer;
 import com.devnmarki.engine.graphics.Spritesheet;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.Rigidbody;
+import com.devnmarki.game.Assets;
 import com.devnmarki.game.Globals;
 import com.devnmarki.game.IDamageable;
 import com.devnmarki.game.characters.Player;
@@ -23,7 +24,7 @@ public abstract class Enemy extends Entity implements IDamageable {
     protected Rigidbody rigidbody;
 
     private int health = 1;
-
+    private float knockback = 2f;
     private float hitEffectTimer = 0f;
 
     public Enemy(TextureRegion spritesheetTexture) {
@@ -66,6 +67,8 @@ public abstract class Enemy extends Entity implements IDamageable {
 
         hitEffectTimer = 0.15f;
 
+        Assets.Sounds.HURT.play();
+
         if (health <= 0)
             die();
     }
@@ -79,7 +82,7 @@ public abstract class Enemy extends Entity implements IDamageable {
         super.onCollisionEnter(actor, normal, contact);
 
         if (actor instanceof Bullet bullet) {
-            rigidbody.setVelocity(new Vector2(15f * bullet.getMoveDirection(), rigidbody.getVelocity().y));
+            rigidbody.setVelocity(new Vector2(knockback * bullet.getMoveDirection(), rigidbody.getVelocity().y));
         }
 
         if (actor instanceof Player player) {
@@ -89,6 +92,10 @@ public abstract class Enemy extends Entity implements IDamageable {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public void setKnockback(float knockback) {
+        this.knockback = knockback;
     }
 
 }
