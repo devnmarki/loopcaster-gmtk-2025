@@ -39,7 +39,7 @@ public class Bullet extends Entity {
         super.onAwake();
 
         addComponent(new SpriteRenderer().setSprite(sprite));
-        addComponent(new BoxCollider().setSize(new Vector2(4f)).setOffset(new Vector2(2f)).setSolid(false));
+        addComponent(new BoxCollider().setSize(new Vector2(6f)).setOffset(new Vector2(4f)).setSolid(false));
         addComponent(new Rigidbody().setGravityScale(0f));
     }
 

@@ -86,11 +86,4 @@ public class FrogEnemy extends Enemy {
             moveDirection *= -1f;
         }
     }
-
-    @Override
-    protected void die() {
-        super.die();
-
-        EntityDestroyer.queue(this);
-    }
 }

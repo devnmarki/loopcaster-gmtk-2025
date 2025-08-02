@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.ecs.Entity;
+import com.devnmarki.engine.ecs.EntityDestroyer;
 import com.devnmarki.engine.graphics.Sprite;
 import com.devnmarki.engine.graphics.SpriteRenderer;
 import com.devnmarki.engine.graphics.Spritesheet;
@@ -27,6 +29,7 @@ public abstract class Enemy extends Entity implements IDamageable {
     private int health = 1;
     private float knockback = 2f;
     private float hitEffectTimer = 0f;
+    private float damagePlayerTimer = 10f;
 
     public Enemy(TextureRegion spritesheetTexture) {
         this.spritesheet = new Spritesheet(spritesheetTexture, 2, 1, new Vector2(16), false);
@@ -60,6 +63,8 @@ public abstract class Enemy extends Entity implements IDamageable {
         } else {
             spriteRenderer.setSprite(spritesheet.getSprite(0)); // normal sprite
         }
+
+        damagePlayerTimer += Gdx.graphics.getDeltaTime();
     }
 
     @Override
@@ -76,6 +81,8 @@ public abstract class Enemy extends Entity implements IDamageable {
 
     protected void die() {
         Player.getInstance().increaseMana(2f);
+        Player.getInstance().increaseScore(100);
+        EntityDestroyer.queue(this);
     }
 
     @Override
@@ -86,8 +93,15 @@ public abstract class Enemy extends Entity implements IDamageable {
             rigidbody.setVelocity(new Vector2(knockback * bullet.getMoveDirection(), rigidbody.getVelocity().y));
         }
 
-        if (actor instanceof Player player) {
+    }
+
+    @Override
+    public void onCollisionStay(Entity actor, Vector2 normal) {
+        super.onCollisionStay(actor, normal);
+
+        if (actor instanceof Player player && damagePlayerTimer >= 1f) {
             player.damage(1f);
+            damagePlayerTimer = 0f;
         }
     }
 

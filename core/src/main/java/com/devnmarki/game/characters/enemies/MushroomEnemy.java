@@ -62,7 +62,7 @@ public class MushroomEnemy extends Enemy {
 
     private void updateShootPoint() {
         if (facingDirection == Direction.Left) {
-            shootPoint = new Vector2(transform.localPosition.x - 6f, transform.localPosition.y + 4f * Engine.gameScale);
+            shootPoint = new Vector2(transform.localPosition.x - 8f, transform.localPosition.y + 4f * Engine.gameScale);
         } else {
             shootPoint = new Vector2(transform.localPosition.x + 20f * Engine.gameScale, transform.localPosition.y + 4f * Engine.gameScale);
         }
@@ -86,10 +86,4 @@ public class MushroomEnemy extends Enemy {
         Engine.SHAPE_RENDERER.end();
     }
 
-    @Override
-    protected void die() {
-        super.die();
-
-        EntityDestroyer.queue(this);
-    }
 }

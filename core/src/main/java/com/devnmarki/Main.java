@@ -2,6 +2,7 @@ package com.devnmarki;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.physics.LayerCollision;
 import com.devnmarki.engine.scene.SceneManager;
@@ -15,6 +16,7 @@ import com.devnmarki.game.characters.enemies.WatcherEnemy;
 import com.devnmarki.game.scenes.DeathScreenScene;
 import com.devnmarki.game.scenes.MainMenuScene;
 import com.devnmarki.game.scenes.SampleScene;
+import com.devnmarki.game.scenes.WorldScene;
 
 import static com.badlogic.gdx.Input.*;
 
@@ -38,6 +40,7 @@ public class Main extends ApplicationAdapter {
         SceneManager.addScene("sample", new SampleScene());
         SceneManager.addScene("main_menu", new MainMenuScene());
         SceneManager.addScene("death_screen", new DeathScreenScene());
+        SceneManager.addScene("world", new WorldScene());
         SceneManager.loadScene("main_menu");
     }
 
@@ -49,17 +52,7 @@ public class Main extends ApplicationAdapter {
         Engine.getInstance().update();
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-            Gdx.app.exit();
-        }
-
-        if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
-            Engine.debugMode = !Engine.debugMode;
-        }
-
-        if (Gdx.input.isKeyJustPressed(Keys.Q)) {
             SceneManager.queueScene("main_menu");
-        } else if (Gdx.input.isKeyJustPressed(Keys.E)) {
-            SceneManager.queueScene("sample");
         }
     }
 

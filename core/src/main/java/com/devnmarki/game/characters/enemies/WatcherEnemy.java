@@ -44,7 +44,7 @@ public class WatcherEnemy extends Enemy {
 
     private void generateInitialMoveDirection() {
         moveDirection.x = MathUtils.randomBoolean() ? -1f : 1f;
-        moveDirection.y = MathUtils.randomBoolean() ? -0.5f : 0.5f;
+        moveDirection.y = MathUtils.randomBoolean() ? -0.3f : 0.3f;
     }
 
     @Override
@@ -69,7 +69,7 @@ public class WatcherEnemy extends Enemy {
         if (collisionNormal.x != 0f) {
             moveDirection.x *= -1f;
         }
-        if (collisionNormal.y != 0f) {
+        else if (collisionNormal.y != 0f) {
             moveDirection.y *= -1f;
         }
     }
@@ -77,12 +77,5 @@ public class WatcherEnemy extends Enemy {
     @Override
     public void onDamage(int damage) {
         super.onDamage(damage);
-    }
-
-    @Override
-    protected void die() {
-        super.die();
-
-        EntityDestroyer.queue(this);
     }
 }

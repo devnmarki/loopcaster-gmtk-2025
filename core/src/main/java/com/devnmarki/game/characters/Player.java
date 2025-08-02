@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.utils.Json;
 import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.Engine;
 import com.devnmarki.engine.assets.ResourceManager;
@@ -17,11 +18,10 @@ import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.engine.physics.BoxCollider;
 import com.devnmarki.engine.physics.Rigidbody;
 import com.devnmarki.engine.scene.SceneManager;
-import com.devnmarki.engine.ui.Label;
 import com.devnmarki.game.Assets;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.Globals;
-import com.devnmarki.game.game_objects.Bullet;
+import com.devnmarki.game.PlayerData;
 import com.devnmarki.game.game_objects.MagicWand;
 import com.devnmarki.game.game_objects.PlayerBullet;
 
@@ -35,7 +35,7 @@ public class Player extends Entity {
 
     private static final float MOVE_SPEED = 5f;
     private static final float JUMP_FORCE = 16f;
-    private static final float FIRE_RATE = 0.15f;
+    private static final float FIRE_RATE = 0.12f;
     public static final float MAX_MANA = 10f;
 
     private Spritesheet spritesheet;
@@ -50,6 +50,8 @@ public class Player extends Entity {
     private Vector2 shootPoint;
     private float fireRateTimer = 0f;
     private float currentMana;
+    private float hitEffectTimer = 0f;
+    private int score = 0;
 
     @Override
     public void onAwake() {
@@ -57,7 +59,7 @@ public class Player extends Entity {
 
         INSTANCE = this;
 
-        spritesheet = new Spritesheet(ResourceManager.loadTexture("sprites/characters/player_sheet.png"), 3, 2, new Vector2(16), false);
+        spritesheet = new Spritesheet(ResourceManager.loadTexture("sprites/characters/player_sheet.png"), 3, 3, new Vector2(16), false);
 
         addComponent(new SpriteRenderer().setSprite(spritesheet.getSprite(0)));
         addComponent(new BoxCollider().setSize(new Vector2(7, 14)).setOffset(new Vector2(6, 0)));
@@ -88,7 +90,7 @@ public class Player extends Entity {
     private void createInputActions() {
         Input.addAction("walk_left", List.of(Keys.LEFT), null);
         Input.addAction("walk_right", List.of(Keys.RIGHT), null);
-        Input.addAction("jump", List.of(Keys.Z), null);
+        Input.addAction("jump", List.of(Keys.UP), null);
         Input.addAction("shoot", List.of(Keys.X), null);
     }
 
@@ -97,11 +99,22 @@ public class Player extends Entity {
         animator.addAnimation("idle_left", new Animation(spritesheet, new int[] { 0 }, 0.1f, true, true));
         animator.addAnimation("walk_right", new Animation(spritesheet, new int[] { 3, 4, 5 }, 0.15f, true, false));
         animator.addAnimation("walk_left", new Animation(spritesheet, new int[] { 3, 4, 5 }, 0.15f, true, true));
+        animator.addAnimation("hurt_right", new Animation(spritesheet, new int[] { 6 }, 0.1f, true, false));
+        animator.addAnimation("hurt_left", new Animation(spritesheet, new int[] { 6 }, 0.1f, true, true));
     }
 
     @Override
     public void onUpdate() {
         super.onUpdate();
+
+//        onGround = true;
+//        if(SceneManager.currentScene.getCollisionContactListener().getCollidingEntities(this).size == 0) {
+//            onGround = false;
+//        }
+
+        if (onGround) {
+            jumps = 2;
+        }
 
         getInput();
         move();
@@ -109,10 +122,6 @@ public class Player extends Entity {
         updateCurrentAnimation();
         updateMagicWand();
         updateMana();
-
-        if (onGround) {
-            jumps = 2;
-        }
     }
 
     private void getInput() {
@@ -160,24 +169,29 @@ public class Player extends Entity {
     }
 
     private void updateCurrentAnimation() {
-        String animName = facingDirection.toString().toLowerCase();
+        String animDirection = facingDirection.toString().toLowerCase();
 
-        if (input == 0f)
-            animator.play("idle_" + animName);
-        else
-            animator.play("walk_" + animName);
+        if (hitEffectTimer > 0f) {
+            hitEffectTimer -= Gdx.graphics.getDeltaTime();
+            animator.play("hurt_" + animDirection);
+        } else {
+            if (input == 0f)
+                animator.play("idle_" + animDirection);
+            else
+                animator.play("walk_" + animDirection);
+        }
     }
 
     private void updateMagicWand() {
         if (facingDirection == Direction.Right) {
             magicWand.transform.localPosition.x = transform.localPosition.x - 4f * Engine.gameScale;
             magicWand.transform.localPosition.y = transform.localPosition.y - 2f * Engine.gameScale;
-            shootPoint = new Vector2(magicWand.transform.localPosition.x + 23f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
+            shootPoint = new Vector2(magicWand.transform.localPosition.x + 13f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
         }
         else {
             magicWand.transform.localPosition.x = transform.localPosition.x + 5f * Engine.gameScale;
             magicWand.transform.localPosition.y = transform.localPosition.y - 2f * Engine.gameScale;
-            shootPoint = new Vector2(magicWand.transform.localPosition.x - 11f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
+            shootPoint = new Vector2(magicWand.transform.localPosition.x - 3f * Engine.gameScale, magicWand.transform.localPosition.y + 8f * Engine.gameScale);
         }
     }
 
@@ -197,9 +211,11 @@ public class Player extends Entity {
     public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
         super.onCollisionEnter(actor, normal, contact);
 
-        if (normal.y < 0) {
+        if (normal.y <= -1f) {
             onGround = true;
         }
+
+        Debug.log(normal.y);
     }
 
     @Override
@@ -215,6 +231,24 @@ public class Player extends Entity {
     }
 
     private void die() {
+        PlayerData data;
+
+        if (Gdx.files.local("save/player.json").exists()) {
+            String savedJson = Gdx.files.local("save/player.json").readString();
+            data = new Json().fromJson(PlayerData.class, savedJson);
+        } else {
+            data = new PlayerData();
+        }
+
+        data.score = score;
+
+        if (score > data.highscore) {
+            data.highscore = score;
+        }
+
+        Json json = new Json();
+        Gdx.files.local("save/player.json").writeString(json.toJson(data), false);
+
         SceneManager.queueScene("death_screen");
     }
 
@@ -222,8 +256,18 @@ public class Player extends Entity {
         currentMana += value;
     }
 
+    public void increaseScore(int value) {
+        score += value;
+    }
+
     public void damage(float value) {
         currentMana -= value;
+        hitEffectTimer = 0.15f;
+        Assets.Sounds.PLAYER_HURT.play();
+    }
+
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
     }
 
     public static Player getInstance() {
@@ -238,4 +282,7 @@ public class Player extends Entity {
         return facingDirection;
     }
 
+    public int getScore() {
+        return score;
+    }
 }

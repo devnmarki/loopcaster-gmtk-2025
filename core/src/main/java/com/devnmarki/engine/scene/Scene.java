@@ -23,6 +23,8 @@ public abstract class Scene {
     private ECSWorld ecsWorld = new ECSWorld();
     private World physicsWorld = new World(new com.badlogic.gdx.math.Vector2(0f, Engine.gravity), true);
 
+    private CollisionContactListener collisionContactListener;
+
     protected Camera camera;
     protected OrthographicCamera uiCamera;
 
@@ -43,11 +45,11 @@ public abstract class Scene {
         ecsWorld = new ECSWorld();
 
         physicsWorld = new World(new com.badlogic.gdx.math.Vector2(0f, Engine.gravity), true);
-        physicsWorld.setContactListener(new CollisionContactListener());
-
+        collisionContactListener = new CollisionContactListener();
+        physicsWorld.setContactListener(collisionContactListener);
         loadEntities();
 
-        camera = new Camera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new Camera(1280, 720);
         camera.transform.localPosition = new Vector2(camera.getViewportWidth() / 2f, camera.getViewportHeight() / 2f);
 
         uiCamera = new OrthographicCamera(camera.getViewportWidth(), camera.getViewportHeight());
@@ -69,6 +71,9 @@ public abstract class Scene {
 
     public void update() {
         physicsWorld.step(1 / 60f, 6, 2);
+
+        if (collisionContactListener != null)
+            collisionContactListener.dispatchCollisionStayEvents();
 
         EntityDestroyer.flush();
     }
@@ -124,6 +129,10 @@ public abstract class Scene {
 
     public Viewport getUiViewport() {
         return uiViewport;
+    }
+
+    public CollisionContactListener getCollisionContactListener() {
+        return collisionContactListener;
     }
 
 }
