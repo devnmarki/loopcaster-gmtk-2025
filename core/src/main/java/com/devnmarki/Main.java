@@ -52,17 +52,7 @@ public class Main extends ApplicationAdapter {
         Engine.getInstance().update();
 
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
-            Gdx.app.exit();
-        }
-
-        if (Gdx.input.isKeyJustPressed(Keys.TAB)) {
-            Engine.debugMode = !Engine.debugMode;
-        }
-
-        if (Gdx.input.isKeyJustPressed(Keys.Q)) {
             SceneManager.queueScene("main_menu");
-        } else if (Gdx.input.isKeyJustPressed(Keys.E)) {
-            SceneManager.queueScene("sample");
         }
     }
 

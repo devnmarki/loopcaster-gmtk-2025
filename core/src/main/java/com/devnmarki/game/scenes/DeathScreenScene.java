@@ -43,7 +43,7 @@ public class DeathScreenScene extends Scene {
         String playerJson = Gdx.files.local("save/player.json").readString();
         PlayerData data = json.fromJson(PlayerData.class, playerJson);
         scoreText.setContent("Score: " + data.score);
-        highscoreText.setContent("Highscore: " + data.highscore);
+        highscoreText.setContent("Best: " + data.highscore);
 
 
         Assets.Sounds.DEATH.play();

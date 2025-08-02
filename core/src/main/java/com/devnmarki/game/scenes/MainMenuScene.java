@@ -43,6 +43,10 @@ public class MainMenuScene extends Scene {
             SceneManager.queueScene("world");
         }
 
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            Gdx.app.exit();
+        }
+
         welcomeText.transform.localPosition = new Vector2(
             camera.getViewportWidth() / 2f - welcomeText.getWidth() / 2f,
             camera.getViewportHeight() / 2f + welcomeText.getHeight() / 2f
