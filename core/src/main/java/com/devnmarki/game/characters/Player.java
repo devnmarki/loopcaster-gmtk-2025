@@ -88,10 +88,10 @@ public class Player extends Entity {
     }
 
     private void createInputActions() {
-        Input.addAction("walk_left", List.of(Keys.LEFT, Keys.A), null);
-        Input.addAction("walk_right", List.of(Keys.RIGHT, Keys.D), null);
-        Input.addAction("jump", List.of(Keys.UP, Keys.W), null);
-        Input.addAction("shoot", List.of(Keys.X, Keys.SHIFT_LEFT), null);
+        Input.addAction("walk_left", List.of(Keys.LEFT), null);
+        Input.addAction("walk_right", List.of(Keys.RIGHT), null);
+        Input.addAction("jump", List.of(Keys.UP), null);
+        Input.addAction("shoot", List.of(Keys.X), null);
     }
 
     private void loadAnimations() {
@@ -107,16 +107,21 @@ public class Player extends Entity {
     public void onUpdate() {
         super.onUpdate();
 
+//        onGround = true;
+//        if(SceneManager.currentScene.getCollisionContactListener().getCollidingEntities(this).size == 0) {
+//            onGround = false;
+//        }
+
+        if (onGround) {
+            jumps = 2;
+        }
+
         getInput();
         move();
         updateFacingDirection();
         updateCurrentAnimation();
         updateMagicWand();
         updateMana();
-
-        if (onGround) {
-            jumps = 2;
-        }
     }
 
     private void getInput() {
@@ -206,11 +211,11 @@ public class Player extends Entity {
     public void onCollisionEnter(Entity actor, Vector2 normal, Contact contact) {
         super.onCollisionEnter(actor, normal, contact);
 
-        Vector2 collisionNormal = new Vector2(contact.getWorldManifold().getNormal().x, contact.getWorldManifold().getNormal().y);
-
-        if (collisionNormal.y >= 1f) {
+        if (normal.y <= -1f) {
             onGround = true;
         }
+
+        Debug.log(normal.y);
     }
 
     @Override
@@ -259,6 +264,10 @@ public class Player extends Entity {
         currentMana -= value;
         hitEffectTimer = 0.15f;
         Assets.Sounds.PLAYER_HURT.play();
+    }
+
+    public void setOnGround(boolean onGround) {
+        this.onGround = onGround;
     }
 
     public static Player getInstance() {

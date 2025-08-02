@@ -22,7 +22,7 @@ public class CollisionContactListener implements ContactListener {
         Vector2 posA = fa.getBody().getPosition();
         Vector2 posB = fb.getBody().getPosition();
 
-        Vector2 normal = posB.cpy().sub(posA).nor();
+        Vector2 normal = contact.getWorldManifold().getNormal();
 
         addCollision(entityA, entityB);
         addCollision(entityB, entityA);
@@ -70,7 +70,7 @@ public class CollisionContactListener implements ContactListener {
         Vector2 posA = fa.getBody().getPosition();
         Vector2 posB = fb.getBody().getPosition();
 
-        Vector2 normal = posB.cpy().sub(posA).nor();
+        Vector2 normal = contact.getWorldManifold().getNormal();
 
         if (!LayerCollision.canCollide(layerA, layerB)){
             entityA.onPreCollision((Entity) fb.getUserData(), new com.devnmarki.engine.math.Vector2(normal.x, normal.y), contact);
@@ -80,6 +80,11 @@ public class CollisionContactListener implements ContactListener {
 
             contact.setEnabled(false);
         }
+
+        entityA.onPreCollision((Entity) fb.getUserData(), new com.devnmarki.engine.math.Vector2(normal.x, normal.y), contact);
+
+        Vector2 flipped = normal.cpy().scl(-1);
+        entityB.onPreCollision((Entity) fa.getUserData(), new com.devnmarki.engine.math.Vector2(flipped.x, flipped.y), contact);
     }
 
     @Override

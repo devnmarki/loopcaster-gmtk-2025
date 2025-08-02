@@ -49,7 +49,7 @@ public abstract class Scene {
         physicsWorld.setContactListener(collisionContactListener);
         loadEntities();
 
-        camera = new Camera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera = new Camera(1280, 720);
         camera.transform.localPosition = new Vector2(camera.getViewportWidth() / 2f, camera.getViewportHeight() / 2f);
 
         uiCamera = new OrthographicCamera(camera.getViewportWidth(), camera.getViewportHeight());
@@ -129,6 +129,10 @@ public abstract class Scene {
 
     public Viewport getUiViewport() {
         return uiViewport;
+    }
+
+    public CollisionContactListener getCollisionContactListener() {
+        return collisionContactListener;
     }
 
 }

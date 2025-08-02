@@ -15,8 +15,8 @@ import java.util.Map;
 
 public class EnemySpawner extends Component {
 
-    private static final float MIN_WAIT_TIME = 2f;
-    private static final float MAX_WAIT_TIME = 3.5f;
+    private static final float MIN_WAIT_TIME = 1.5f;
+    private static final float MAX_WAIT_TIME = 2.5f;
 
     private List<Entity> spawnPoints = new ArrayList<>();
     private final Map<Class<? extends Enemy>, Integer> enemyTypes = new HashMap<>();

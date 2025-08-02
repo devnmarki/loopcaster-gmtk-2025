@@ -40,7 +40,7 @@ public class MainMenuScene extends Scene {
         super.update();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
-            SceneManager.queueScene("sample");
+            SceneManager.queueScene("world");
         }
 
         welcomeText.transform.localPosition = new Vector2(

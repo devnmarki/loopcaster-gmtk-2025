@@ -78,11 +78,4 @@ public class WatcherEnemy extends Enemy {
     public void onDamage(int damage) {
         super.onDamage(damage);
     }
-
-    @Override
-    protected void die() {
-        super.die();
-
-        EntityDestroyer.queue(this);
-    }
 }

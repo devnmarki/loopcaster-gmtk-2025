@@ -33,8 +33,6 @@ public class Lwjgl3Launcher {
         //// They can also be loaded from the root of assets/ .
         configuration.setWindowIcon("mana_icon.png");
 
-        configuration.setResizable(false);
-
         return configuration;
     }
 }

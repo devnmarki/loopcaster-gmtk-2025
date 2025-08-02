@@ -86,10 +86,4 @@ public class MushroomEnemy extends Enemy {
         Engine.SHAPE_RENDERER.end();
     }
 
-    @Override
-    protected void die() {
-        super.die();
-
-        EntityDestroyer.queue(this);
-    }
 }

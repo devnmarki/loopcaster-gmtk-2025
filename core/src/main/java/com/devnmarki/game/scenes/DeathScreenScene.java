@@ -54,7 +54,7 @@ public class DeathScreenScene extends Scene {
         super.update();
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            SceneManager.loadScene("sample");
+            SceneManager.loadScene("world");
         }
 
         label.transform.localPosition = new Vector2(

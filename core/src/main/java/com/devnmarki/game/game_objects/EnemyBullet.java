@@ -5,6 +5,7 @@ import com.devnmarki.engine.ecs.Entity;
 import com.devnmarki.engine.math.Vector2;
 import com.devnmarki.game.Direction;
 import com.devnmarki.game.characters.Player;
+import com.devnmarki.game.characters.enemies.MushroomEnemy;
 
 public class EnemyBullet extends Bullet {
 
@@ -20,7 +21,9 @@ public class EnemyBullet extends Bullet {
             Player.getInstance().damage(1f);
         }
 
-        setShouldDestroy(true);
+        if (!(actor instanceof MushroomEnemy)) {
+            setShouldDestroy(true);
+        }
     }
 
 }

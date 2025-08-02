@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.devnmarki.engine.Debug;
 import com.devnmarki.engine.ecs.Entity;
+import com.devnmarki.engine.ecs.EntityDestroyer;
 import com.devnmarki.engine.graphics.Sprite;
 import com.devnmarki.engine.graphics.SpriteRenderer;
 import com.devnmarki.engine.graphics.Spritesheet;
@@ -81,6 +82,7 @@ public abstract class Enemy extends Entity implements IDamageable {
     protected void die() {
         Player.getInstance().increaseMana(2f);
         Player.getInstance().increaseScore(100);
+        EntityDestroyer.queue(this);
     }
 
     @Override
@@ -90,6 +92,7 @@ public abstract class Enemy extends Entity implements IDamageable {
         if (actor instanceof PlayerBullet bullet) {
             rigidbody.setVelocity(new Vector2(knockback * bullet.getMoveDirection(), rigidbody.getVelocity().y));
         }
+
     }
 
     @Override
